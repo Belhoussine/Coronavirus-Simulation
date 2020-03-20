@@ -1,7 +1,7 @@
 var population = [];
 
 //Sizes and Dimensions
-var populationSize = 250;
+var populationSize = 400;
 var personSize = 10;
 var canvasWidth = 750;
 var canvasHeight = 500;
@@ -20,8 +20,8 @@ var infected = 3;
 var healthy = populationSize - infected;
 var recovered = 0;
 var dead = 0;
-var mvFreq = 1;
-var speed = 1;
+var mvFreq = 4;
+var speed = 3;
 
 // Virus Data
 var recoveryRate = 0.9;
