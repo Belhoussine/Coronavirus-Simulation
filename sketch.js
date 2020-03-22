@@ -6,7 +6,6 @@ var personSize = 10;
 var canvasWidth = 750;
 var canvasHeight = 500;
 var offset = personSize / 2;
-var countryScale = 1000;
 var fRate = 40;
 
 // Population Characteristics
@@ -61,8 +60,8 @@ function setup() {
   startTime = second();
   createPopulation();
   infectIndividuals();
-  updatingId = setInterval(update,1000);
-  movingId = setInterval(main,25); 
+  updatingId = setInterval(update,dayTime * 1000);
+  movingId = setInterval(main,1000 / fRate); 
 }
 
 function main(){
