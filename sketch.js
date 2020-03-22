@@ -262,7 +262,7 @@ function fadeIn(){
   fill(0, 0, 0, 50);
   text('Week '+ currentDay / 7, canvasWidth / 2 - 70, canvasHeight / 10 );
   textSize(14);
-  text("--Click on each category to hide/show chart lines--", canvasWidth / 3.3, canvasHeight / 7 );
+  text("--Click on each category to hide/show chart lines--", canvasWidth / 2 - 160, canvasHeight / 7 );
 }
 
 // Updating chart's labels and data points for every week
