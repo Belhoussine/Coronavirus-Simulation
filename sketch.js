@@ -31,7 +31,7 @@ var healthyHistory = [healthy];
 var infectedHistory = [infected];
 var recoveredHistory = [recovered];
 var deadHistory = [dead];
-var yLabels = [""]
+var yLabels = ["Day 1"]
 var flag = true;
 
 //Visual Characteristics
@@ -84,9 +84,10 @@ function wakeUp() {
 //Stopping Movement
 function sleep() {
   let currentTime = second();
-  if ((startTime + dayTime) % 60 <= currentTime ) {
+  if (startTime == -1 || (startTime + dayTime) % 60 == currentTime ) {
     startTime = currentTime;
     currentDay++;
+    updateDataHistory();
   }
 }
 
@@ -152,12 +153,12 @@ function summary() {
   if (currentDay % summaryFreq == 0) {
     summarizing = true;
     fadeIn();
-    startTime = 0;
+    startTime = -1;
     if(flag){
       flag = false;
       setTimeout(function(){
         noLoop();
-        updateDataHistory();
+        //updateDataHistory();
         makeChart();
         makeButton();
       },800);
@@ -259,7 +260,9 @@ function fadeIn(){
   background(255,255,255,35);
   textSize(40);
   fill(0, 0, 0, 50);
-  text('Week '+ currentDay / 7, canvasWidth / 2 - 70, canvasHeight / 8 );
+  text('Week '+ currentDay / 7, canvasWidth / 2 - 70, canvasHeight / 10 );
+  textSize(14);
+  text("--Click on each category to hide/show chart lines--", canvasWidth / 3.3, canvasHeight / 7 );
 }
 
 // Updating chart's labels and data points for every week
