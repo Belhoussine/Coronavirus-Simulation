@@ -6,7 +6,6 @@ var personSize = 10;
 var canvasWidth = 750;
 var canvasHeight = 500;
 var offset = personSize / 2;
-var countryScale = 1000;
 var fRate = 40;
 
 // Population Characteristics
@@ -20,7 +19,7 @@ var speed = 2;
 // Time Tracking
 var startTime;
 var currentDay = 1;
-var dayTime = 2;
+var dayTime = 1.5;
 var nightTime = 0;
 var night = false;
 var summaryFreq = 7;
@@ -55,14 +54,15 @@ function setup() {
   canvasWidth = windowWidth;
   canvasHeight = windowHeight;
   populationSize= floor(max(canvasWidth,canvasHeight) / 200) * 100;
+  populationSize = isMobile() ? min(500,populationSize) : populationSize;
   healthy = populationSize - infected;
   healthyHistory = [healthy];
   createCanvas(canvasWidth, canvasHeight);
   startTime = second();
   createPopulation();
   infectIndividuals();
-  updatingId = setInterval(update,1000);
-  movingId = setInterval(main,25); 
+  updatingId = setInterval(update,dayTime * 1000);
+  movingId = setInterval(main,1000 / fRate); 
 }
 
 function main(){
@@ -248,6 +248,7 @@ function makeButton(){
   button.style('transition', 'all 0.8s ease 0s');
   
   button.mouseOver(function(){
+    button.style('cursor','pointer');
     button.style('color','#404040');
     button.style('letter-spacing','3px');
     button.style('display','inline-block');
@@ -298,6 +299,9 @@ function updateDataHistory(){
   deadHistory.push(dead);
 }
 
+function isMobile(){
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ;
+}
 // End result
 function result(){
 
