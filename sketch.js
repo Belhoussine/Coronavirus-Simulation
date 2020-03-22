@@ -1,7 +1,7 @@
 var population = [];
 
 //Sizes and Dimensions
-var populationSize = 500;
+var populationSize = 100;
 var personSize = 10;
 var canvasWidth = 750;
 var canvasHeight = 500;
@@ -9,21 +9,38 @@ var offset = personSize / 2;
 var countryScale = 1000;
 var fRate = 40;
 
+// Population Characteristics
+var infected = 3;
+var healthy = populationSize - infected;
+var recovered = 0;
+var dead = 0;
+var mvFreq = 2;
+var speed = 2;
+
 // Time Tracking
 var startTime;
 var currentDay = 1;
 var dayTime = 1;
 var nightTime = 0;
 var night = false;
-
-// Population Characteristics
-var infected = 5;
-var healthy = populationSize - infected;
-var recovered = 0;
-var dead = 0;
-var mvFreq = 2;
-var speed = 2;
+var summaryFreq = 14;
+var summaryTime = 10;
 var summarizing = false;
+
+//Chart parameters
+var healthyHistory = [healthy];
+var infectedHistory = [infected];
+var recoveredHistory = [recovered];
+var deadHistory = [dead];
+var yLabels = [""]
+var flag = true;
+
+//Visual Characteristics
+  healthyColor = 'rgba(20, 100, 20, 0.65)';
+  infectedColor = 'rgba(100, 20, 20, 0.65)';
+  recoveredColor = 'rgba(20, 20, 135, 0.7)';
+  deadColor = 'rgba(0, 0, 0, 0.70)';
+  hostpitalizedColor = 'rgba(20, 100, 100, 0.65)';
 
 // Virus Data
 var recoveryRate = 0.9;
@@ -44,11 +61,16 @@ function setup() {
 
 // Loop Function
 function draw() {
-  background(255);
-  wakeUp();
-  sleep();
-  updateText();
-  //summary()
+  if(!summarizing){
+    flag = true;
+    background(255);
+    wakeUp();
+    sleep();
+    updateText();
+  }
+  summary()
+  if(infected == 0)
+    result();
 }
 
 //Moving and Interacting with other people
@@ -62,20 +84,10 @@ function wakeUp() {
 
 //Stopping Movement
 function sleep() {
-
   let currentTime = second();
-  if ((startTime + dayTime) % 60 == currentTime) {
+  if ((startTime + dayTime) % 60 <= currentTime ) {
     startTime = currentTime;
-    //night = true;
-    //background(255);
-    //updateText();
-    //filter(INVERT);
-    //evolve()
-    //noLoop();
-    setTimeout(function() {
-      currentDay++;
-      //loop();
-    }, nightTime * 1000);
+    currentDay++;
   }
 }
 
@@ -87,13 +99,13 @@ function updateText() {
   textSize(15);
   text('Initial Population: ' + populationSize, 10, 60);
   textSize(20);
-  fill('rgba(20, 100, 20, 0.7)');
+  fill(healthyColor);
   text('Healthy: ' + healthy, canvasWidth - 140, 30);
-  fill('rgba(100, 20, 20, 0.7)');
+  fill(infectedColor);
   text('Infected: ' + infected, canvasWidth - 140, 60);
-  fill('rgba(20, 20, 100, 0.7)');
+  fill(recoveredColor);
   text('Recovered: ' + recovered, canvasWidth - 140, 90);
-  fill('rgba(0, 0, 0, 0.7)');
+  fill(deadColor);
   text('Dead: ' + dead, canvasWidth - 140, 120);
 }
 
@@ -138,8 +150,130 @@ function touching(a, b) {
 }
 
 function summary() {
-  if (currentDay % 7 == 0) {
-    background(255,255,255,25);
+  if (currentDay % summaryFreq == 0) {
+    summarizing = true;
+    fadeIn();
+    startTime = 0;
+    if(flag){
+      flag = false;
+      setTimeout(function(){
+        noLoop();
+        updateDataHistory();
+        makeChart();
+        makeButton();
+      },800);
+    }
+    
   }
+}
+
+function makeChart(){
+ document.getElementById("chart-container").style.width = (canvasWidth* 0.9).toString()+"px";
+ document.getElementById("chart-container").style.top = (canvasHeight /6).toString()+"px";
+ var chartCanvas = document.createElement("CANVAS");
+ chartCanvas.id='myChart';
+ document.getElementById("chart-container").appendChild(chartCanvas)
+ var ctx = document.getElementById('myChart').getContext('2d');
+ var chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: yLabels,
+          datasets: [{
+              label: "Healthy",
+              backgroundColor: healthyColor,
+              borderColor: healthyColor,
+              data: healthyHistory,
+          },{
+              label: "Infected",
+              backgroundColor: infectedColor,
+              borderColor: infectedColor,
+              data: infectedHistory,
+            },{
+              label: "Recovered",
+              backgroundColor: recoveredColor,
+              borderColor: recoveredColor,
+              data: recoveredHistory,
+            },{
+              label: "Dead",
+              backgroundColor: deadColor,
+              borderColor: deadColor,
+              data: deadHistory,
+            }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero: true
+                  }
+              }]
+        }
+      }
+  });
+}
+
+function makeButton(){
+  button = createButton('Continue');
+  button.position(canvasWidth / 2, canvasHeight * 0.93);
+  button.style('margin','0');
+  button.style('transform','translate(-50%, 0%)');
+  button.style('font-size', '12px');
+  button.style('position','absolute');
+  button.style('border', 'none');
+  button.style('background','#404040');
+  button.style('color', '#ffffff');
+  button.style('text-transform', 'uppercase');
+  button.style('padding','5px');
+  button.style('border-radius', '6px');
+  button.style('display','inline-block');
+  button.style('transition', 'all 0.3s ease 0s');
+  
+  button.mouseOver(function(){
+    button.style('color','#404040');
+    button.style('letter-spacing','3px');
+    button.style('display','inline-block');
+    button.style('background','none');
+    button.style('-webkit-box-shadow', '0px 5px 40px -10px rgba(0,0,0,0.57)');
+    button.style('-moz-box-shadow', '0px 5px 40px -10px rgba(0,0,0,0.57)');
+    button.style('transition', 'all 0.3s ease 0s');
+  });
+  
+  button.mouseOut(function(){
+    button.style('letter-spacing','0');
+    button.style('background','#404040');
+    button.style('color', '#ffffff');
+    button.style('transition', 'all 0.3s ease 0s');
+  });
+  
+  button.mousePressed(function(){ 
+    var container = document.getElementById("chart-container");
+    container.removeChild(container.childNodes[0]); 
+    container.removeChild(container.childNodes[1]);
+    button.remove();
+    summarizing = false;
+    wakeUp();
+    loop();
+  });
+}
+function fadeIn(){
+  background(255,255,255,35);
+  textSize(40);
+  fill(0, 0, 0, 50);
+  text('Week '+ currentDay / 7, canvasWidth / 2 - 70, canvasHeight / 8 );
+}
+
+// Updating chart's labels and data points for every week
+function updateDataHistory(){
+  yLabels.push("Day "+currentDay)
+  healthyHistory.push(healthy);
+  infectedHistory.push(infected);
+  recoveredHistory.push(recovered);
+  deadHistory.push(dead);
+}
+
+// End result
+function result(){
+
 }
   // ISOLATION OF INFECTED CASES
