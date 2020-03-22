@@ -1,7 +1,7 @@
 var population = [];
 
 //Sizes and Dimensions
-var populationSize = 100;
+var populationSize = 400;
 var personSize = 10;
 var canvasWidth = 750;
 var canvasHeight = 500;
@@ -23,8 +23,7 @@ var currentDay = 1;
 var dayTime = 1;
 var nightTime = 0;
 var night = false;
-var summaryFreq = 14;
-var summaryTime = 10;
+var summaryFreq = 7;
 var summarizing = false;
 
 //Chart parameters
