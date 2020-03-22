@@ -1,7 +1,7 @@
 var population = [];
 
 //Sizes and Dimensions
-var populationSize = 500;
+var populationSize;
 var personSize = 10;
 var canvasWidth = 750;
 var canvasHeight = 500;
@@ -11,23 +11,25 @@ var fRate = 40;
 
 // Population Characteristics
 var infected = 3;
-var healthy = populationSize - infected;
+var healthy;
 var recovered = 0;
 var dead = 0;
-var mvFreq = 3;
+var mvFreq = 4;
 var speed = 2;
 
 // Time Tracking
 var startTime;
 var currentDay = 1;
-var dayTime = 1;
+var dayTime = 2;
 var nightTime = 0;
 var night = false;
 var summaryFreq = 7;
 var summarizing = false;
+var updatingId;
+var movingId;
 
 //Chart parameters
-var healthyHistory = [healthy];
+var healthyHistory;
 var infectedHistory = [infected];
 var recoveredHistory = [recovered];
 var deadHistory = [dead];
@@ -35,11 +37,11 @@ var yLabels = ["Day 1"]
 var flag = true;
 
 //Visual Characteristics
-  healthyColor = 'rgba(20, 100, 20, 0.65)';
-  infectedColor = 'rgba(100, 20, 20, 0.65)';
-  recoveredColor = 'rgba(20, 20, 135, 0.7)';
-  deadColor = 'rgba(0, 0, 0, 0.70)';
-  hostpitalizedColor = 'rgba(20, 100, 100, 0.65)';
+var healthyColor = 'rgba(20, 100, 20, 0.65)';
+var infectedColor = 'rgba(100, 20, 20, 0.65)';
+var recoveredColor = 'rgba(20, 20, 135, 0.7)';
+var deadColor = 'rgba(0, 0, 0, 0.70)';
+var hostpitalizedColor = 'rgba(20, 100, 100, 0.65)';
 
 // Virus Data
 var recoveryRate = 0.9;
@@ -52,26 +54,31 @@ function setup() {
   frameRate(fRate);
   canvasWidth = windowWidth;
   canvasHeight = windowHeight;
+  populationSize= floor(max(canvasWidth,canvasHeight) / 200) * 100;
+  healthy = populationSize - infected;
+  healthyHistory = [healthy];
   createCanvas(canvasWidth, canvasHeight);
   startTime = second();
   createPopulation();
   infectIndividuals();
+  updatingId = setInterval(update,1000);
+  movingId = setInterval(main,25); 
 }
 
-// Loop Function
-function draw() {
+function main(){
   if(!summarizing){
     flag = true;
     background(255);
     wakeUp();
-    sleep();
     updateText();
   }
-  summary()
-  if(infected == 0)
-    result();
+  summary();
 }
 
+
+// Loop Function
+function draw() {
+}
 //Moving and Interacting with other people
 function wakeUp() {
   night = false;
@@ -82,14 +89,16 @@ function wakeUp() {
 }
 
 //Stopping Movement
-function sleep() {
-  let currentTime = second();
-  if (startTime == -1 || (startTime + dayTime) % 60 == currentTime ) {
-    startTime = currentTime;
+function update() {
+  //let currentTime = second();
+  //if (startTime == -1 || (startTime + dayTime) % 60 == currentTime ) {
+    //startTime = currentTime;
     currentDay++;
     updateDataHistory();
-  }
+  //}
 }
+
+
 
 function updateText() {
   noStroke();
@@ -152,16 +161,25 @@ function touching(a, b) {
 function summary() {
   if (currentDay % summaryFreq == 0) {
     summarizing = true;
+    clearInterval(updatingId);
     fadeIn();
-    startTime = -1;
     if(flag){
+      //let tempId = setInterval(fadeIn,25);
       flag = false;
+      
       setTimeout(function(){
-        noLoop();
+        
+        //noLoop();
         //updateDataHistory();
+        //clearInterval(tempId);
+        for(let i=0; i < fRate; i++){
+          fadeIn();
+        }
+        clearInterval(movingId);
+        //needChart=true;
         makeChart();
-        makeButton();
       },800);
+      setTimeout(makeButton,1500);
     }
     
   }
@@ -215,9 +233,9 @@ function makeChart(){
 
 function makeButton(){
   button = createButton('Continue');
-  button.position(canvasWidth / 2, canvasHeight * 0.93);
+  button.position(canvasWidth - 100 , canvasHeight/20);
   button.style('margin','0');
-  button.style('transform','translate(-50%, 0%)');
+  button.style('transform','translate(-40%, 0%)');
   button.style('font-size', '12px');
   button.style('position','absolute');
   button.style('border', 'none');
@@ -227,7 +245,7 @@ function makeButton(){
   button.style('padding','5px');
   button.style('border-radius', '6px');
   button.style('display','inline-block');
-  button.style('transition', 'all 0.3s ease 0s');
+  button.style('transition', 'all 0.8s ease 0s');
   
   button.mouseOver(function(){
     button.style('color','#404040');
@@ -252,8 +270,14 @@ function makeButton(){
     container.removeChild(container.childNodes[1]);
     button.remove();
     summarizing = false;
-    wakeUp();
-    loop();
+    for(let i=0; i < fRate; i++){ 
+        background(255);
+        wakeUp();
+        updateText();
+    }
+    update();
+    updatingId = setInterval(update,1000);
+    movingId = setInterval(main,25); 
   });
 }
 function fadeIn(){
@@ -262,7 +286,7 @@ function fadeIn(){
   fill(0, 0, 0, 50);
   text('Week '+ currentDay / 7, canvasWidth / 2 - 70, canvasHeight / 10 );
   textSize(14);
-  text("--Click on each category to hide/show chart lines--", canvasWidth / 2 - 160, canvasHeight / 7 );
+  text("--Click on each category (colored box) to hide/show chart lines--", canvasWidth / 2 - 210, canvasHeight / 7 + 2 );
 }
 
 // Updating chart's labels and data points for every week
