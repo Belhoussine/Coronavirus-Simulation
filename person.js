@@ -1,3 +1,4 @@
+
 function person(x, y, id) {
   //ID and State
   this.id = id;
@@ -7,6 +8,7 @@ function person(x, y, id) {
   this.hospitalized = false;
   this.dead = false;
   this.moving = false;
+  this.inQuarantine = false;
 
 
   //Position and Movement
@@ -47,10 +49,7 @@ function person(x, y, id) {
       fill(recoveredColor);
     } else if (this.dead) {
       fill(deadColor);
-    } else if (this.hospitalized) {
-      console.log("hola");
-      fill(hospitalizedColor);
-    } else {
+    } else{
       fill(healthyColor);
     }
     circle(this.x, this.y, this.size);
@@ -89,6 +88,7 @@ function person(x, y, id) {
       if (this.gotInfected(other)) {
         this.infected = true;
         infected++;
+        maxInfected++;
         healthy--;
       }
     }
@@ -98,20 +98,33 @@ function person(x, y, id) {
     if (!this.dead) {
       if (this.infected) {
         let randomnessFactor = Math.random() * fRate * dayTime;
-        if (randomnessFactor <= 0.2) {
+        if (randomnessFactor <= speed / 20) {
           if (this.immunity < deathRate) {
             this.die();
-          } else if (this.immunity < complicationRate) {
+          } else if ( this.immunity < complicationRate) {
             this.getHospitalized();
+            if(Math.random() < this.immunity / 100)
+              this.recover();
           } else {
             this.recover();
           }
         }
       }
-      if (!this.moving && Math.random() < 0.02)
-        this.startMoving();
-      else if (this.moving && Math.random() < 0.02)
-        this.stopMoving();
+      if (!this.moving){
+        if(this.inQuarantine){
+          if(Math.random() < quarantineMov)
+            this.startMoving();
+        }
+        else if(Math.random() < normalMov)
+          this.startMoving();
+      }
+      else if (this.moving)
+        if(this.inQuarantine){
+          if(Math.random() < quarantineStop)
+            this.stopMoving();
+        }
+        else if(Math.random() < normalStop)
+          this.stopMoving();
     }
   }
 
@@ -137,7 +150,7 @@ function person(x, y, id) {
 
   this.getHospitalized = function() {
     this.hospitalized = true;
-    this.immunity /= 1.5;
+    this.immunity *= 0.9;
   }
 
   this.recover = function() {
@@ -150,7 +163,7 @@ function person(x, y, id) {
 
   this.gotInfected = function(other) {
     if (!this.moving) console.log(touching(this, other))
-    return touching(this, other) && other.infected && !this.infected && !this.recovered;
+    return touching(this, other) && other.infected && !this.infected && !this.recovered && other.moving;
   }
 
   this.quarantine = function() {
