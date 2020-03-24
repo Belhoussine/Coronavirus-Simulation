@@ -81,9 +81,9 @@ function setup() {
   speed = 1.5;
   quarantine = false;
   quarantineStop = 0.025;
-  quarantineMov = 0.015;
-  normalStop = 0.015;
-  normalMov = 0.020;
+  quarantineMov = 0.012;
+  normalStop = 0.012;
+  normalMov = 0.025;
 
   //
   currentDay = 1;
