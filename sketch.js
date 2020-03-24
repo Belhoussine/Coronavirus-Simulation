@@ -270,6 +270,7 @@ function makeStartButton() {
   button = createButton('Start Simulation');
   button.position(canvasWidth / 2, canvasHeight * 0.95);
   button.style('margin', '0');
+  if(!isMobile())
   button.style('transform', 'translate(-40%, 0%)');
   button.style('letter-spacing', '0.5px');
   button.style('font-size', '10px');
@@ -537,6 +538,7 @@ function makeButton() {
   button = createButton('Continue');
   button.position(canvasWidth - 100, canvasHeight / 30);
   button.style('margin', '0');
+  if(!isMobile)
   button.style('transform', 'translate(-40%, 0%)');
   button.style('font-size', '12px');
   button.style('position', 'absolute');
@@ -590,6 +592,7 @@ function makeRestartButton() {
   button = createButton('Restart');
   button.position(canvasWidth - 90, canvasHeight / 30);
   button.style('margin', '0');
+  if(!isMobile)
   button.style('transform', 'translate(-40%, 0%)');
   button.style('font-size', '12px');
   button.style('position', 'absolute');
@@ -682,7 +685,11 @@ function makeSummary() {
   text("Total Deaths: " + dead + " (" + deadPer + "%)", canvasWidth - 211, canvasHeight / 4 + 100);
   text("Total Recovered: " + recovered + " (" + recoveredPer + "%)", canvasWidth - 211, canvasHeight / 4 + 130);
 }
-
+function changeMobile(){
+  if(!summarizing && isMobile()){
+    changeState();
+  }
+}
 function mouseClicked(e) {
   if (inTriangle(e)) {
     changeState();
