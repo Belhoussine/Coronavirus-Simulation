@@ -13,4 +13,5 @@ canvas {
  right: 0;
  top: 0; 
  bottom: 20px;
+ margin-bottom: 0;
 }

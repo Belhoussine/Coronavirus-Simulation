@@ -1,5 +1,16 @@
 var population = [];
 
+
+//Triangle data
+
+var tx1;
+var tx2;
+var tx3;
+var ty1;
+var ty2;
+var ty3;
+var k;
+
 //Sizes and Dimensions
 var populationSize;
 var personSize;
@@ -21,6 +32,7 @@ var quarantineStop;
 var quarantineMov;
 var normalStop;
 var normalMov;
+var hospitalCapacity;
 
 // Time Tracking
 var startTime;
@@ -39,10 +51,12 @@ var healthyHistory;
 var infectedHistory;
 var recoveredHistory;
 var deadHistory;
+var hospitalCapHistory;
 var yLabels;
 var fontColors;
 var flag;
 var flag2;
+var insideTriangle;
 
 //Visual Characteristics
 var healthyColor = 'rgba(20, 100, 20, 0.65)';
@@ -62,7 +76,9 @@ function setup() {
 
   background(255);
   population = [];
-
+  insideTriangle = false;
+  
+  
   //
   canvasWidth = windowWidth;
   canvasHeight = windowHeight;
@@ -70,7 +86,16 @@ function setup() {
   populationSize = isMobile() ? Math.min(500, populationSize) : populationSize;
   personSize = 10;
   offset = personSize / 2;
-
+  
+  //
+  
+  tx1 = canvasWidth / 2;
+  ty1 = canvasHeight - 30;
+  tx2 = canvasWidth / 2 + 15;
+  ty2 = canvasHeight + 1;
+  tx3 = canvasWidth / 2 - 15;
+  ty3 = canvasHeight + 1;
+  k = 0;
   //
   infected = 2;
   maxInfected = infected;
@@ -82,8 +107,9 @@ function setup() {
   quarantine = false;
   quarantineStop = 0.025;
   quarantineMov = 0.012;
-  normalStop = 0.012;
-  normalMov = 0.025;
+  normalStop = 0.015;
+  normalMov = 0.020;
+  hospitalCapacity = Math.floor(populationSize / 3);
 
   //
   currentDay = 1;
@@ -97,11 +123,13 @@ function setup() {
   infectedHistory = [infected];
   recoveredHistory = [recovered];
   deadHistory = [dead];
-  let firstDay = "1 "+ (quarantine?"(Q)":"(N)")
+  hospitalCapHistory = [hospitalCapacity];
+  let firstDay = "1 " + (quarantine ? "(Q)" : "(N)")
   yLabels = [firstDay];
-  fontColors = [quarantine? healthyColor : infectedColor];
+  fontColors = [quarantine ? healthyColor : infectedColor];
   flag = true;
-  flag2 = true
+  flag2 = true;
+  flag3 = true;
 
   //
   recoveryRate = 0.9;
@@ -110,11 +138,11 @@ function setup() {
 
   frameRate(fRate);
   createCanvas(canvasWidth, canvasHeight);
+
   createPopulation();
   infectIndividuals();
   updatingId = setInterval(update, dayTime * 1000);
   movingId = setInterval(main, 1000 / fRate);
-
 }
 
 function main() {
@@ -168,7 +196,7 @@ function wakeUp() {
     population[p].evolve();
     if (quarantine) {
       population[p].inQuarantine = true;
-    }else{
+    } else {
       population[p].inQuarantine = false;
     }
   }
@@ -179,31 +207,25 @@ function wakeUp() {
 
 
 function updateText() {
+  
   noStroke();
   textSize(28);
   fill(0, 0, 0, 180);
   text('Day ' + currentDay, 10, 30);
   textSize(15);
-  text('Initial Population: ' + populationSize, 10, 60);
-  fill(0,0,0,180);
-  textSize(18);
-  text('State: ', 3, canvasHeight-5);
-  if(quarantine){
-    fill(healthyColor);
-    text('Quarantine ', 52, canvasHeight-4.7);
+  text('Initial Population: ' + populationSize, 10, 55);
+  text('Hospitals Capacity: ' + hospitalCapacity, 10, 75);
+  fill(0, 0, 0, 180);
+  textSize(20);
+  text('State: ', 5, canvasHeight - 7.3);
+  if (quarantine) {
+    fill(quarantineColor());
+    text('Quarantine ', 58, canvasHeight - 7);
+  } else {
+    fill(noquarantineColor());
+    text('No Quarantine ', 58, canvasHeight - 7);
   }
-  else{
-    fill(infectedColor);
-    text('No Quarantine ', 52, canvasHeight-4.7);
-  }
-  if(quarantine){
-    fill(healthyColor);
-  }else{
-    fill(infectedColor);
-  }
-  stroke(0)
-  strokeWeight(0.5);
-  triangle(canvasWidth/2,canvasHeight - 30, canvasWidth / 2 + 15, canvasHeight+1, canvasWidth / 2 - 15, canvasHeight+1);
+  makeTriangle();
   noStroke();
   textSize(20);
   fill(healthyColor);
@@ -225,8 +247,10 @@ function createPopulation() {
     let intersect = false;
     for (let j = 0; j < i; j++) {
       let existingPerson = population[j];
-      if (touching(tempPerson, existingPerson))
+      if (touching(tempPerson, existingPerson)) {
         intersect = true;
+        break;
+      }
     }
     if (!intersect) {
       population.push(tempPerson);
@@ -261,12 +285,12 @@ function summary() {
     summarizing = true;
     clearInterval(updatingId);
     fadeIn();
+    document.body.style.cursor ='default';
     if (flag) {
       //let tempId = setInterval(fadeIn,25);
       flag = false;
-
       setTimeout(function() {
-
+        flag3 = false;
         //noLoop();
         //updateDataHistory();
         //clearInterval(tempId);
@@ -301,26 +325,31 @@ function makeChart() {
     data: {
       labels: yLabels,
       datasets: [{
-        label: "Healthy",
-        backgroundColor: healthyColor,
-        borderColor: healthyColor,
-        data: healthyHistory,
+        label: "Hospitals Capacity",
+        backgroundColor: 'rgba(255,255,255,0)',
+        borderColor: 'orange',
+        data: hospitalCapHistory,
       }, {
         label: "Infected",
         backgroundColor: infectedColor,
         borderColor: infectedColor,
         data: infectedHistory,
+      },{
+        label: "Dead",
+        backgroundColor: deadColor,
+        borderColor: deadColor,
+        data: deadHistory,
       }, {
         label: "Recovered",
         backgroundColor: recoveredColor,
         borderColor: recoveredColor,
         data: recoveredHistory,
       }, {
-        label: "Dead",
-        backgroundColor: deadColor,
-        borderColor: deadColor,
-        data: deadHistory,
-      },            ]
+        label: "Healthy",
+        backgroundColor: healthyColor,
+        borderColor: healthyColor,
+        data: healthyHistory,
+      }]
     },
     options: {
       maintainAspectRatio: false,
@@ -332,7 +361,7 @@ function makeChart() {
         }],
         xAxes: [{
           ticks: {
-           
+
           }
         }]
       }
@@ -388,6 +417,8 @@ function makeButton() {
     updatingId = setInterval(update, dayTime * 1000);
     movingId = setInterval(main, 1000 / fRate);
     summarizing = false;
+    flag3 = true;
+    document.elementFromPoint(10, 10).click();
   });
 }
 
@@ -434,7 +465,6 @@ function makeRestartButton() {
     loop();
   });
 }
-
 // Transition from simulation to summary
 function fadeIn() {
   background(255, 255, 255, 35);
@@ -449,10 +479,8 @@ function fadeIn() {
     text("-- Congratulations to the survivors! --", canvasWidth / 2 - 105, canvasHeight / 7 + 2);
   else
     text("--Click on each category (colored box) to hide/show chart lines--", canvasWidth / 2 - 200, canvasHeight / 7 + 2);
-  fill(healthyColor);
-  text("— (Q): Period in Quarantine ", canvasWidth / 2 - 200, canvasHeight - 5);
-  fill(infectedColor);
-  text("— (N): Period not in Quarantine ", canvasWidth / 2 , canvasHeight - 5);
+   text(" (Q): Period in Quarantine ", canvasWidth / 2 - 200, canvasHeight - 10);
+  text(" (N): Period not in Quarantine ", canvasWidth / 2, canvasHeight - 10);
 }
 
 // Updating chart's labels and data points for every week
@@ -461,8 +489,9 @@ function updateDataHistory() {
   infectedHistory.push(infected);
   recoveredHistory.push(recovered);
   deadHistory.push(dead);
-  yLabels.push(quarantine? currentDay + " (Q)" :currentDay + " (N)");
-  fontColors.push(quarantine? healthyColor:infectedColor);
+  yLabels.push(quarantine ? currentDay + " (Q)" : currentDay + " (N)");
+  fontColors.push(quarantine ? healthyColor : infectedColor);
+  hospitalCapHistory.push(hospitalCapacity);
 }
 
 function isMobile() {
@@ -490,11 +519,74 @@ function makeSummary() {
   text("Total Recovered: " + recovered + " (" + recoveredPer + "%)", canvasWidth - 211, canvasHeight / 4 + 130);
 }
 
-function mouseClicked() {
-  if(!summarizing) quarantine ^=1;
+function mouseClicked(e) {
+  if (flag3 && inTriangle(e)) {
+    changeState();
+  }
 }
+
+function makeTriangle() {
+  stroke(0);
+  let e = {x: pmouseX, y: pmouseY};
+  if (inTriangle(e) && flag3) {
+    let temp;
+    
+    strokeWeight(0.5+k/5);
+    if(quarantine)
+      fill(quarantineColor());
+    else
+      fill(noquarantineColor());
+    
+    document.body.style.cursor = 'pointer';
+    k = Math.min(6,k+1);
+  }
+  else{
+    if(quarantine)
+      fill(quarantineColor());
+    else
+      fill(noquarantineColor());
+    strokeWeight(0.5-k/5);
+    document.body.style.cursor = 'default';
+    k = Math.max(0,k-1);
+  }
+  triangle(tx1, ty1 - k, tx2 + k/2, ty2, tx3-k/2, ty3);
+}
+function quarantineColor(){
+  return 'rgba(20, '+(100+k*5).toString()+', 20, '+(0.65 + k*5).toString()+')'
+}
+
+function noquarantineColor(){
+  return 'rgba('+(100+k*12).toString()+', 20, 20, '+(0.65 + k*5).toString()+')'
+}
+
+function inTriangle(m) {
+  let x1 = canvasWidth / 2;
+  let y1 = canvasHeight - 30 - k;
+  let x2 = canvasWidth / 2 + 15 + k/2;
+  let y2 = canvasHeight + 1 ;
+  let x3 = canvasWidth / 2 - 15 - k/2;
+  let y3 = canvasHeight + 1;
+  let areaOrig = abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1));
+  let area1 = abs((x1 - m.x) * (y2 - m.y) - (x2 - m.x) * (y1 - m.y));
+  let area2 = abs((x2 - m.x) * (y3 - m.y) - (x3 - m.x) * (y2 - m.y));
+  let area3 = abs((x3 - m.x) * (y1 - m.y) - (x1 - m.x) * (y3 - m.y));
+  if (area1 + area2 + area3 == areaOrig) {
+    return insideTriangle=true;
+  }
+  return insideTriangle=false;
+}
+
+function changeState() {
+  if (!summarizing) {
+    quarantine ^= 1;
+  }
+}
+
+
 // ISOLATION OF INFECTED CASES
 
 // ADD NEW INFECTIONS PER DAY
 
 // ADD HOSPITAL CAPACITY
+
+// ADD TACTILE FOR PHONE
