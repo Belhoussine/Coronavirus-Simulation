@@ -56,7 +56,9 @@ var yLabels;
 var fontColors;
 var flag;
 var flag2;
+var flag4;
 var insideTriangle;
+var started;
 
 //Visual Characteristics
 var healthyColor = 'rgba(20, 100, 20, 0.65)';
@@ -77,8 +79,8 @@ function setup() {
   background(255);
   population = [];
   insideTriangle = false;
-  
-  
+
+
   //
   canvasWidth = windowWidth;
   canvasHeight = windowHeight;
@@ -86,9 +88,9 @@ function setup() {
   populationSize = isMobile() ? Math.min(500, populationSize) : populationSize;
   personSize = 10;
   offset = personSize / 2;
-  
+
   //
-  
+
   tx1 = canvasWidth / 2;
   ty1 = canvasHeight - 30;
   tx2 = canvasWidth / 2 + 15;
@@ -107,7 +109,7 @@ function setup() {
   quarantine = false;
   quarantineStop = 0.025;
   quarantineMov = 0.012;
-  normalStop = 0.015;
+  normalStop = 0.01;
   normalMov = 0.020;
   hospitalCapacity = Math.floor(populationSize / 3);
 
@@ -131,6 +133,7 @@ function setup() {
   flag2 = true;
   flag3 = true;
 
+  started = false;
   //
   recoveryRate = 0.9;
   deathRate = 0.05;
@@ -138,11 +141,172 @@ function setup() {
 
   frameRate(fRate);
   createCanvas(canvasWidth, canvasHeight);
+  background(255);
+  welcomePage();
+}
 
-  createPopulation();
-  infectIndividuals();
-  updatingId = setInterval(update, dayTime * 1000);
-  movingId = setInterval(main, 1000 / fRate);
+//
+function welcomePage() {
+  makeStartButton();
+
+  fill(0, 0, 0, 200);
+  noStroke();
+  let ts = min(16, canvasWidth / 46);
+  textSize(ts+10);
+  text("#StayAtHome",canvasWidth/2-5*ts,canvasHeight/18)
+  textSize(ts+7);
+  text("#RestezChezVous",canvasWidth/2-5*ts,canvasHeight*0.53)
+  fill(0, 0, 0, 170);
+  textSize(ts);
+  text("The following is a simulation of the spread of the coronavirus within a population.", 15, canvasHeight / 8)
+  text("This simulation is based on real data from the WHO (Mortality/Recovery rates etc.).", 15, canvasHeight / 8 + ts * 1.5)
+  text("It mimics human behavior, and should help make predictions regarding the future of our countries.", 15, canvasHeight / 8 + ts * 3)
+
+  if (canvasWidth / 46 > 22) {
+    text("The ultimate goal of this simulation is to raise awareness, and to show that staying at home is the best approach against this virus.", 15, canvasHeight / 8 + ts * 4.5)
+    text("During the simulation, we will keep track of       healthy,      infected,      recovered, and       dead individuals.", 15, canvasHeight / 8 + ts * 6)
+    text("Individuals at home have a yellow shell       preventing them from getting infected.", 15, canvasHeight / 8 + ts * 7.5)
+    text("You can change quarantine modes by clicking on          (Bottom of the screen).", 15, canvasHeight / 8 + ts * 9)
+    text("Bi-weekly charts will be displayed as well as a summary at the end.", 15, canvasHeight / 8 + ts * 10.5)
+    fill(healthyColor);
+    circle(ts * 21, canvasHeight / 8 + ts * 6 - 4, ts * 0.6)
+    fill(infectedColor);
+    circle(ts * 26.2, canvasHeight / 8 + ts * 6 - 4, ts * 0.6)
+    fill(recoveredColor);
+    circle(ts * 31.5, canvasHeight / 8 + ts * 6 - 4, ts * 0.6)
+    fill(deadColor);
+    circle(ts * 40.1, canvasHeight / 8 + ts * 6 - 4, ts * 0.6)
+    fill(255, 255, 255, 0)
+    stroke(255, 204, 0);
+    strokeWeight(1.7);
+    circle(ts * 19.3, canvasHeight / 8 + ts * 7.5 - 4, ts * 0.6)
+    noStroke();
+    fill(0, 0, 0, 170);
+    
+    fill(infectedColor);
+    triangle(ts*25-9,canvasHeight / 8 + ts * 9 - 10,ts * 25 -15,canvasHeight / 8 + ts * 9 +1, ts * 25-3,canvasHeight / 8 + ts * 9 +1)
+    fill(0, 0, 0, 170);
+    //////////
+    text("Ceci est une simulation concernant la propagation du coronavirus au sein d'une population.", 15, canvasHeight * 0.58)
+    text("Cette simulation est basée sur des données réelles provenant de l'OMS (Taux de mortalité etc.)", 15, canvasHeight * 0.58 + ts * 1.5)
+    text("En imitant le comportement humain, celle ci peut aider à prédire l'avenir de nos pays.", 15, canvasHeight * 0.58 + ts * 3)
+    text("Le but ultime de cette simulation est de sensibiliser et de montrer que rester à la maison est la meilleure approche contre ce virus.", 15, canvasHeight * 0.58 + ts * 4.5)
+    text("Nous suiverons les personnes       saines,      infectées,      guéries, et      décédées.", 15, canvasHeight * 0.58 + ts * 6)
+    text("Les individus à la maison ont une coquille jaune       qui les empêche d'être infectés.", 15, canvasHeight* 0.58 + ts * 7.5)
+    text("Le mode de quarantaine peut être changé en cliquant sur            (Bas de l'écran).", 15, canvasHeight * 0.58 + ts * 9)
+    text("Des graphiques bihebdomadaires seront affichés ainsi qu'un résumé à la fin.", 15, canvasHeight * 0.58+ ts * 10.5)
+    fill(healthyColor);
+    circle(ts * 15.5, canvasHeight * 0.58+ ts * 6 - 4, ts * 0.7)
+    fill(infectedColor);
+    circle(ts * 20.5, canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
+    fill(recoveredColor);
+    circle(ts * 26.3, canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
+    fill(deadColor);
+    circle(ts * 32.7, canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
+    fill(255, 255, 255, 0)
+    stroke(255, 204, 0);
+    strokeWeight(1.7);
+    circle(ts * 23.2, canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
+    noStroke();
+    
+    fill(infectedColor);
+    triangle(ts*29-7,canvasHeight * 0.58 + ts * 9 - 10,ts * 29 -13,canvasHeight * 0.58+ ts * 9 +1, ts * 29-1,canvasHeight * 0.58 + ts * 9+1)
+
+  } else {
+    text("The ultimate goal of this simulation is to raise awareness, and to show that staying at home is the ", 15, canvasHeight / 8 + ts * 4.5)
+    text("best approach against this virus.", 15, canvasHeight / 8 + ts * 6)
+    text("During the simulation, we will keep track of       healthy,      infected,      recovered, and      dead ", 15, canvasHeight / 8 + ts * 7.5)
+    text("individuals. Individuals at home have a yellow shell         preventing them from getting infected.", 15, canvasHeight / 8 + ts * 9)
+    text("You can change quarantine modes by clicking on          (Bottom of the screen).", 15, canvasHeight / 8 + ts * 10.5)
+    text("Bi-weekly charts will be displayed as well as a summary at the end.", 15, canvasHeight / 8 + ts * 12)
+    fill(healthyColor);
+    circle(ts * 21, canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
+    fill(infectedColor);
+    circle(ts * 26.2, canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
+    fill(recoveredColor);
+    circle(ts * 31.7, canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
+    fill(deadColor);
+    circle(ts * 40.1, canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
+    fill(255, 255, 255, 0)
+    stroke(255, 204, 0);
+    strokeWeight(1.7);
+    circle(ts * 25, canvasHeight / 8 + ts * 9 - 4, ts * 0.7)
+    noStroke();
+    
+    fill(infectedColor);
+    triangle(ts*25-7,canvasHeight / 8 + ts * 10.5 - 10,ts * 25 -13,canvasHeight / 8 + ts * 10.5 +1, ts * 25-1,canvasHeight / 8 + ts * 10.5 +1)
+    fill(0, 0, 0, 170);
+    //////////
+    text("Ceci est une simulation concernant la propagation du coronavirus au sein d'une population.", 15, canvasHeight * 0.58)
+    text("Cette simulation est basée sur des données réelles provenant de l'OMS (Taux de mortalité etc.)", 15, canvasHeight * 0.58 + ts * 1.5)
+    text("En imitant le comportement humain, celle ci peut aider à prédire l'avenir de nos pays.", 15, canvasHeight * 0.58 + ts * 3)
+    text("Le but ultime de cette simulation est de sensibiliser et de montrer que rester à la maison est la ", 15, canvasHeight * 0.58 + ts * 4.5)
+    text("meilleure approche contre ce virus.", 15, canvasHeight * 0.58 + ts * 6)
+    text("Nous suiverons les personnes       saines,      infectées,      guéries, et      décédées.", 15, canvasHeight * 0.58 + ts * 7.5)
+    text("Les individus à la maison ont une coquille jaune       qui les empêche d'être infectés.", 15, canvasHeight* 0.58 + ts * 9)
+    text("Le mode de quarantaine peut être changé en cliquant sur            (Bas de l'écran).", 15, canvasHeight * 0.58 + ts * 10.5)
+    text("Des graphiques bihebdomadaires seront affichés ainsi qu'un résumé à la fin.", 15, canvasHeight * 0.58+ ts * 12)
+    fill(healthyColor);
+    circle(ts * 15.8, canvasHeight * 0.58+ ts * 7.5 - 4, ts * 0.7)
+    fill(infectedColor);
+    circle(ts * 20.8, canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
+    fill(recoveredColor);
+    circle(ts * 26.4, canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
+    fill(deadColor);
+    circle(ts * 33, canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
+    fill(255, 255, 255, 0)
+    stroke(255, 204, 0);
+    strokeWeight(1.7);
+    circle(ts * 23.4, canvasHeight * 0.58 + ts * 9 - 4, ts * 0.7)
+    noStroke();
+    
+    fill(infectedColor);
+    triangle(ts*29-7,canvasHeight * 0.58 + ts * 10.5 - 10,ts * 29 -13,canvasHeight * 0.58+ ts * 10.5 +1, ts * 29-1,canvasHeight * 0.58 + ts * 10.5 +1)
+  }
+}
+
+function makeStartButton() {
+
+  button = createButton('Start Simulation');
+  button.position(canvasWidth / 2, canvasHeight * 0.95);
+  button.style('margin', '0');
+  button.style('transform', 'translate(-40%, 0%)');
+  button.style('letter-spacing', '0.5px');
+  button.style('font-size', '10px');
+  button.style('position', 'absolute');
+  button.style('border', 'none');
+  button.style('background', '#505050');
+  button.style('color', '#ffffff');
+  button.style('text-transform', 'uppercase');
+  button.style('padding', '4px');
+  button.style('border-radius', '6px');
+  button.style('display', 'inline-block');
+  button.style('transition', 'all 0.8s ease 0s');
+
+  button.mouseOver(function() {
+    button.style('cursor', 'pointer');
+    button.style('color', '#404040');
+    button.style('letter-spacing', '3px');
+    button.style('display', 'inline-block');
+    button.style('background', 'none');
+    button.style('-webkit-box-shadow', '0px 5px 40px -10px rgba(0,0,0,0.57)');
+    button.style('-moz-box-shadow', '0px 5px 40px -10px rgba(0,0,0,0.57)');
+    button.style('transition', 'all 0.3s ease 0s');
+  });
+
+  button.mouseOut(function() {
+    button.style('letter-spacing', '0.5px');
+    button.style('background', '#505050');
+    button.style('color', '#ffffff');
+    button.style('transition', 'all 0.3s ease 0s');
+  });
+
+  button.mousePressed(function() {
+    if (!started) {
+      started = true;
+    }
+    button.remove();
+  });
 }
 
 function main() {
@@ -166,17 +330,20 @@ function _main() {
 
 //Updating data each day
 function update() {
-  //let currentTime = second();
-  //if (startTime == -1 || (startTime + dayTime) % 60 == currentTime ) {
-  //startTime = currentTime;
   currentDay++;
   updateDataHistory();
-  //}
 }
 
 // Loop Function
 function draw() {
-  if (infected == 0) {
+  if (started) {
+    createPopulation();
+    infectIndividuals();
+    updatingId = setInterval(update, dayTime * 1000);
+    movingId = setInterval(main, 1000 / fRate);
+    started = false;
+  }
+  if (infected == 0 ) {
     endResult = true;
     clearInterval(movingId);
     clearInterval(updatingId);
@@ -203,11 +370,8 @@ function wakeUp() {
 }
 
 
-
-
-
 function updateText() {
-  
+
   noStroke();
   textSize(28);
   fill(0, 0, 0, 180);
@@ -217,13 +381,13 @@ function updateText() {
   text('Hospitals Capacity: ' + hospitalCapacity, 10, 75);
   fill(0, 0, 0, 180);
   textSize(20);
-  text('State: ', 5, canvasHeight - 7.3);
+  text('State: ', 6, canvasHeight - 8.3);
   if (quarantine) {
     fill(quarantineColor());
-    text('Quarantine ', 58, canvasHeight - 7);
+    text('Quarantine ', 59, canvasHeight - 8);
   } else {
     fill(noquarantineColor());
-    text('No Quarantine ', 58, canvasHeight - 7);
+    text('No Quarantine ', 59, canvasHeight - 8);
   }
   makeTriangle();
   noStroke();
@@ -285,12 +449,12 @@ function summary() {
     summarizing = true;
     clearInterval(updatingId);
     fadeIn();
-    document.body.style.cursor ='default';
+    document.body.style.cursor = 'default';
     if (flag) {
       //let tempId = setInterval(fadeIn,25);
       flag = false;
       setTimeout(function() {
-        flag3 = false;
+        //flag3 = false;
         //noLoop();
         //updateDataHistory();
         //clearInterval(tempId);
@@ -334,7 +498,7 @@ function makeChart() {
         backgroundColor: infectedColor,
         borderColor: infectedColor,
         data: infectedHistory,
-      },{
+      }, {
         label: "Dead",
         backgroundColor: deadColor,
         borderColor: deadColor,
@@ -417,7 +581,7 @@ function makeButton() {
     updatingId = setInterval(update, dayTime * 1000);
     movingId = setInterval(main, 1000 / fRate);
     summarizing = false;
-    flag3 = true;
+    //flag3 = true;
     document.elementFromPoint(10, 10).click();
   });
 }
@@ -479,7 +643,7 @@ function fadeIn() {
     text("-- Congratulations to the survivors! --", canvasWidth / 2 - 105, canvasHeight / 7 + 2);
   else
     text("--Click on each category (colored box) to hide/show chart lines--", canvasWidth / 2 - 200, canvasHeight / 7 + 2);
-   text(" (Q): Period in Quarantine ", canvasWidth / 2 - 200, canvasHeight - 10);
+  text(" (Q): Period in Quarantine ", canvasWidth / 2 - 200, canvasHeight - 10);
   text(" (N): Period not in Quarantine ", canvasWidth / 2, canvasHeight - 10);
 }
 
@@ -520,60 +684,63 @@ function makeSummary() {
 }
 
 function mouseClicked(e) {
-  if (flag3 && inTriangle(e)) {
+  if (inTriangle(e)) {
     changeState();
   }
 }
 
 function makeTriangle() {
   stroke(0);
-  let e = {x: pmouseX, y: pmouseY};
-  if (inTriangle(e) && flag3) {
+  let e = {
+    x: pmouseX,
+    y: pmouseY
+  };
+  if (inTriangle(e)) {
     let temp;
-    
-    strokeWeight(0.5+k/5);
-    if(quarantine)
+
+    strokeWeight(0.5 + k / 5);
+    if (quarantine)
       fill(quarantineColor());
     else
       fill(noquarantineColor());
-    
+
     document.body.style.cursor = 'pointer';
-    k = Math.min(6,k+1);
-  }
-  else{
-    if(quarantine)
+    k = Math.min(6, k + 1);
+  } else {
+    if (quarantine)
       fill(quarantineColor());
     else
       fill(noquarantineColor());
-    strokeWeight(0.5-k/5);
+    strokeWeight(0.5 - k / 5);
     document.body.style.cursor = 'default';
-    k = Math.max(0,k-1);
+    k = Math.max(0, k - 1);
   }
-  triangle(tx1, ty1 - k, tx2 + k/2, ty2, tx3-k/2, ty3);
-}
-function quarantineColor(){
-  return 'rgba(20, '+(100+k*5).toString()+', 20, '+(0.65 + k*5).toString()+')'
+  triangle(tx1, ty1 - k, tx2 + k / 2, ty2, tx3 - k / 2, ty3);
 }
 
-function noquarantineColor(){
-  return 'rgba('+(100+k*12).toString()+', 20, 20, '+(0.65 + k*5).toString()+')'
+function quarantineColor() {
+  return 'rgba(20, ' + (100 + k * 5).toString() + ', 20, ' + (0.65 + k * 5).toString() + ')'
+}
+
+function noquarantineColor() {
+  return 'rgba(' + (100 + k * 12).toString() + ', 20, 20, ' + (0.65 + k * 5).toString() + ')'
 }
 
 function inTriangle(m) {
   let x1 = canvasWidth / 2;
   let y1 = canvasHeight - 30 - k;
-  let x2 = canvasWidth / 2 + 15 + k/2;
-  let y2 = canvasHeight + 1 ;
-  let x3 = canvasWidth / 2 - 15 - k/2;
+  let x2 = canvasWidth / 2 + 15 + k / 2;
+  let y2 = canvasHeight + 1;
+  let x3 = canvasWidth / 2 - 15 - k / 2;
   let y3 = canvasHeight + 1;
   let areaOrig = abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1));
   let area1 = abs((x1 - m.x) * (y2 - m.y) - (x2 - m.x) * (y1 - m.y));
   let area2 = abs((x2 - m.x) * (y3 - m.y) - (x3 - m.x) * (y2 - m.y));
   let area3 = abs((x3 - m.x) * (y1 - m.y) - (x1 - m.x) * (y3 - m.y));
   if (area1 + area2 + area3 == areaOrig) {
-    return insideTriangle=true;
+    return insideTriangle = true;
   }
-  return insideTriangle=false;
+  return insideTriangle = false;
 }
 
 function changeState() {
@@ -587,6 +754,10 @@ function changeState() {
 
 // ADD NEW INFECTIONS PER DAY
 
-// ADD HOSPITAL CAPACITY
+// MOVE STATISTICS TO THE LEFT
+
+// ADD MORE STATISTICS
+
+// ADD WELCOME PAGE
 
 // ADD TACTILE FOR PHONE
