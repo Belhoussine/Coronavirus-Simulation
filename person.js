@@ -98,7 +98,7 @@ function person(x, y, id) {
     if (!this.dead) {
       if (this.infected) {
         let randomnessFactor = Math.random() * fRate * dayTime;
-        if (randomnessFactor <= speed / 20) {
+        if (maxInfected >= 3 && randomnessFactor <= speed / 20) {
           if (this.immunity < deathRate) {
             this.die();
           } else if ( this.immunity < complicationRate) {
