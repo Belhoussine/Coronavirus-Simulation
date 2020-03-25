@@ -98,7 +98,7 @@ function setup() {
   ty3 = canvasHeight + 1;
   k = 0;
   //
-  infected = 2;
+  infected = 3 + 2 * mobile;
   maxInfected = infected;
   healthy = populationSize - infected;
   recovered = 0;
@@ -395,34 +395,34 @@ function updateText() {
   textSize(28);
   if(mobile) textSize(40)
   fill(0, 0, 0, 180);
-  text('Day ' + currentDay, 10, 30);
+  text('Day ' + currentDay, 10 + mobile * 30, 70 + mobile * 30);
   textSize(15);
   if(mobile) textSize(27)
-  text('Initial Population: ' + populationSize, 10, 55);
-  text('Hospitals Capacity: ' + hospitalCapacity, 10, 75);
+  text('Initial Population: ' + populationSize, 10 + mobile * 30, 55 + mobile * 45);
+  text('Hospitals Capacity: ' + hospitalCapacity, 10 + mobile * 30, 75 + mobile * 55);
   fill(0, 0, 0, 180);
   textSize(20);
-  if(mobile) textSize(30)
-  text('State: ', 6 + mobile * 20, canvasHeight - 8.3 - mobile * 30);
+  if(mobile) textSize(36)
+  text('State: ', 6 + mobile * 30, canvasHeight - 8.3 - mobile * 30);
   if (quarantine) {
     fill(quarantineColor());
-    text('Quarantine ', 59 + mobile * 50, canvasHeight - 8 - mobile * 30);
+    text('Quarantine ', 59 + mobile * 65, canvasHeight - 8 - mobile * 30);
   } else {
     fill(noquarantineColor());
-    text('No Quarantine ', 59 + mobile * 50, canvasHeight - 8 - mobile * 30);
+    text('No Quarantine ', 59 + mobile * 65, canvasHeight - 8 - mobile * 30);
   }
   makeTriangle();
   noStroke();
   textSize(20);
   if(mobile) textSize(32);
   fill(healthyColor);
-  text('Healthy: ' + healthy, canvasWidth - 140 - mobile * 70 , 25 + mobile *20);
+  text('Healthy: ' + healthy, canvasWidth - 140 - mobile * 85 , 25 + mobile *20);
   fill(infectedColor);
-  text('Infected: ' + infected, canvasWidth - 140 - mobile * 70 , 50+ mobile *20);
+  text('Infected: ' + infected, canvasWidth - 140 - mobile *85 , 50+ mobile *35);
   fill(recoveredColor);
-  text('Recovered: ' + recovered, canvasWidth - 140 - mobile * 70 , 75+ mobile *20);
+  text('Recovered: ' + recovered, canvasWidth - 140 - mobile * 85 , 75+ mobile *50);
   fill(deadColor);
-  text('Dead: ' + dead, canvasWidth - 140 - mobile * 70 , 100+ mobile *20);
+  text('Dead: ' + dead, canvasWidth - 140 - mobile * 85 , 100+ mobile *65);
 }
 
 //Creates a population
@@ -502,8 +502,9 @@ function makeChart() {
     document.getElementById("chart-container").style.width = (canvasWidth * 0.9).toString() + "px";
   }
 
-  document.getElementById("chart-container").style.top = (canvasHeight / 6).toString() + "px";
-  if(mobile) document.getElementById("chart-container").style.bottom = (canvasHeight / 5).toString() + "px";
+  document.getElementById("chart-container").style.top = ((canvasHeight / 6)+mobile * 30).toString() + "px";
+  if(mobile){ 
+    document.getElementById("chart-container").style.bottom = (canvasHeight / 5).toString() + "px";}
   var chartCanvas = document.createElement("CANVAS");
   chartCanvas.id = 'myChart';
   document.getElementById("chart-container").appendChild(chartCanvas)
@@ -559,7 +560,7 @@ function makeChart() {
 
 function makeButton() {
   button = createButton('Continue');
-  button.position(canvasWidth - 100, canvasHeight / 30);
+  button.position(canvasWidth - 100 - mobile * 30, canvasHeight / 30 );
   button.style('margin', '0');
   if(mobile)
   button.style('transform', 'translate(-40%, 0%)');
@@ -674,9 +675,15 @@ function fadeIn() {
   if (endResult)
     text("-- Congratulations to the survivors! --", canvasWidth / 2 - 105, canvasHeight / 7 + 2);
   else
-    text("--Click on each category (colored box) to hide/show chart lines--", canvasWidth / 2 - 200, canvasHeight / 7 + 2);
-  text(" (Q): Period in Quarantine ", canvasWidth / 2 - 200, canvasHeight - 10 - mobile * 10);
-  text(" (N): Period not in Quarantine ", canvasWidth / 2, canvasHeight - 10 - mobile * 10);
+    text("--Click on each category (colored box) to hide/show chart lines--", canvasWidth / 2 - 200 - mobile * 60, canvasHeight / 7 + 2);
+  if(mobile){
+   text(" (Q): Period in Quarantine ", canvasWidth / 2 - 100, canvasHeight - 100);
+  text(" (N): Period not in Quarantine ", canvasWidth / 2 - 100, canvasHeight - 50);
+  }
+  else{
+  text(" (Q): Period in Quarantine ", canvasWidth / 2 - 200, canvasHeight - 10 );
+  text(" (N): Period not in Quarantine ", canvasWidth / 2, canvasHeight - 10 );
+  }
 }
 
 // Updating chart's labels and data points for every week
@@ -793,3 +800,7 @@ function changeState() {
 // MOVE STATISTICS TO THE LEFT
 
 // ADD MORE STATISTICS
+
+// ADD WELCOME PAGE
+
+// ADD TACTILE FOR PHONE
