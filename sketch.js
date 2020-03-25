@@ -158,7 +158,7 @@ function welcomePage() {
   fill(0, 0, 0, 200);
   noStroke();
   let ts = min(16, canvasWidth / 46);
-  if (mobile) ts = 21;
+  if (mobile) ts = 22;
   textSize(ts + 10);
   text("#StayAtHome", canvasWidth / 2 - 5 * ts, canvasHeight / 18)
   textSize(ts + 7);
