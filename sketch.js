@@ -107,8 +107,8 @@ async function setup() {
   recovered = 0;
   dead = 0;
   mvFreq = 100;
-  speed = 1.5 + mobile;
-  quarantine = false;
+  speed = 1.5 + mobile*2;
+  quarantine = !mobile;
   quarantineStop = 0.025;
   quarantineMov = 0.012;
   normalStop = 0.01;
@@ -155,7 +155,7 @@ function welcomePage() {
   fill(0, 0, 0, 200);
   noStroke();
   let ts = min(16, canvasWidth / 46);
-  if (mobile) ts = 18;
+  if (mobile) ts = 19;
   textSize(ts + 10);
   text("#StayAtHome", canvasWidth / 2 - 5 * ts, canvasHeight / 18)
   textSize(ts + 7);
@@ -516,9 +516,9 @@ function makeChart() {
     document.getElementById("chart-container").style.width = (canvasWidth * 0.9).toString() + "px";
   }
 
-  document.getElementById("chart-container").style.top = ((canvasHeight / 6) + mobile * 30).toString() + "px";
+  document.getElementById("chart-container").style.top = ((canvasHeight / 6) + mobile * 20).toString() + "px";
   if (mobile) {
-    document.getElementById("chart-container").style.bottom = (canvasHeight / 5).toString() + "px";
+    document.getElementById("chart-container").style.bottom = (canvasHeight / 3).toString() + "px";
   }
   var chartCanvas = document.createElement("CANVAS");
   chartCanvas.id = 'myChart';
@@ -638,7 +638,7 @@ function makeButton() {
 
 function makeRestartButton() {
   button = createButton('Restart');
-  button.position(canvasWidth - 90 - mobile*100, canvasHeight / 30);
+  button.position(canvasWidth - 120 - mobile * 90, canvasHeight / 30);
   button.style('margin', '0');
   if (!mobile)
     button.style('transform', 'translate(-40%, 0%)');
@@ -689,13 +689,13 @@ function fadeIn() {
   if (mobile) textSize(48)
   fill(0, 0, 0, 50);
   if (endResult)
-    text('Summary', canvasWidth / 2 - 80, canvasHeight / 10);
+    text('Summary', canvasWidth / 2 - 80, canvasHeight / (10+5*mobile));
   else
     text('Week ' + Math.ceil(currentDay / 7), canvasWidth / 2 - 70, canvasHeight / 10);
   textSize(14);
   if (mobile) textSize(25)
   if (endResult)
-    text("-- Congratulations to the survivors! --", canvasWidth / 2 - 105-mobile*80, canvasHeight / 7 + 2);
+    text("-- Congratulations to the survivors! --", canvasWidth / 2 - 105 - mobile * 80, canvasHeight / (7+5*mobile) );
   else
     text("--Click on each category (colored box) to hide/show chart lines--", canvasWidth / 2 - 200 - mobile * 115, canvasHeight / 7 + 2);
   if (mobile) {
@@ -734,17 +734,17 @@ function makeSummary() {
   let deadPer = (100 * dead / populationSize).toFixed(2);
   let recoveredPer = (100 * recovered / maxInfected).toFixed(2);
   textSize(26);
-  if(mobile) textSize(35)
+  if (mobile) textSize(35)
   fill(0, 0, 0);
-  text("Statistics", canvasWidth * 0.75 - mobile * 100, canvasHeight / 4);
+  text("Statistics", canvasWidth * 0.85 - mobile * 250, (3*mobile) *canvasHeight / 4 );
   textSize(13)
-  if(mobile) textSize(25)
-  text("Days elapsed: " + currentDay, canvasWidth * 0.75 - mobile * 100, canvasHeight / 4 + 40 + mobile * 15);
-  text("Total Infections: " + maxInfected + " (" + infectedPer + "%)", canvasWidth * 0.75 - mobile * 100, canvasHeight / 4 + 70 + mobile * 30);
-  text("Total Deaths: " + dead + " (" + deadPer + "%)", canvasWidth * 0.75- mobile * 100, canvasHeight / 4 + 100 + mobile * 45);
-  text("Total Recovered: " + recovered + " (" + recoveredPer + "%)", canvasWidth * 0.75- mobile * 100, canvasHeight / 4 + 130 + mobile * 60);
-  text("Days Over Hospitals Capacity: " + daysOverCapacity, canvasWidth * 0.75- mobile * 100, canvasHeight / 4 + 160 + mobile * 75);
-  text("Patients without a hospital bed: " + maxInfected - hospitalCapacity, canvasWidth * 0.75- mobile * 100, canvasHeight / 4 + 160 + mobile * 90);
+  if (mobile) textSize(25)
+  text("Days elapsed: " + currentDay, canvasWidth * 0.85 - mobile * 250, (3*mobile) *canvasHeight / 4 + 40 + mobile * 15);
+  text("Total Infections: " + maxInfected + " (" + infectedPer + "%)", canvasWidth * 0.85 - mobile * 250, (3*mobile) *canvasHeight / 4 + 70 + mobile * 30);
+  text("Total Deaths: " + dead + " (" + deadPer + "%)", canvasWidth * 0.85 - mobile * 250, (3*mobile) *canvasHeight / 4 + 100 + mobile * 45);
+  text("Total Recovered: " + recovered + " (" + recoveredPer + "%)", canvasWidth * 0.85 - mobile * 250, (3*mobile) *canvasHeight / 4 + 130 + mobile * 60);
+  text("Hospital Deficiency: " + daysOverCapacity +" days", canvasWidth * 0.85 - mobile * 250, (3*mobile) *canvasHeight / 4 + 160 + mobile * 75);
+  text("Untreated cases: " + (maxInfected - hospitalCapacity).toString(),canvasWidth * 0.85 - mobile * 250, (3*mobile) *canvasHeight / 4 + 190 + mobile * 90);
 }
 
 function changeMobile() {
@@ -822,7 +822,7 @@ function changeState() {
 async function getDataset() {
   let today = new Date()
 
-  let mo = today.getMonth()+1;
+  let mo = today.getMonth() + 1;
   let da = today.getDate();
   let m = mo < 10 ? '0' + mo.toString() : mo.toString();
   let d = da < 10 ? '0' + (da).toString : (da).toString();
@@ -833,7 +833,7 @@ async function getDataset() {
     let x = 1;
     let yesterday = new Date(today)
     yesterday.setDate(yesterday.getDate() - x)
-    mo = yesterday.getMonth()+1;
+    mo = yesterday.getMonth() + 1;
     da = yesterday.getDate();
     m = mo < 10 ? '0' + mo.toString() : mo.toString();
     d = da < 10 ? '0' + (da).toString : (da).toString();
