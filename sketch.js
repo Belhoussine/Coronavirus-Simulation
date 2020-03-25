@@ -158,7 +158,7 @@ function welcomePage() {
   fill(0, 0, 0, 200);
   noStroke();
   let ts = min(16, canvasWidth / 46);
-  if (mobile) ts = 20;
+  if (mobile) ts = 23;
   textSize(ts + 10);
   text("#StayAtHome", canvasWidth / 2 - 5 * ts, canvasHeight / 18)
   textSize(ts + 7);
@@ -514,8 +514,8 @@ function summary() {
 
 function makeChart() {
   if (endResult) {
-    document.getElementById("chart-container").style.width = (canvasWidth * 0.75+ mobile /6).toString() + "px";
-    document.getElementById("chart-container").style.right = (canvasWidth * 0.25- mobile /6).toString() + "px";
+    document.getElementById("chart-container").style.width = (canvasWidth * (0.75+ mobile /6)).toString() + "px";
+    document.getElementById("chart-container").style.right = (canvasWidth * (0.25- mobile /6à).toString() + "px";
   } else {
     document.getElementById("chart-container").style.width = (canvasWidth * 0.9).toString() + "px";
   }
@@ -703,8 +703,8 @@ function fadeIn() {
   else
     text("--Click on each category (colored box) to hide/show chart lines--", canvasWidth / 2 - 200 - mobile * 115, canvasHeight / 7 + 2);
   if (mobile) {
-    text(" (Q): Period in Quarantine ", canvasWidth / 3 - 130, canvasHeight - 220);
-    text(" (N): Period not in Quarantine ", canvasWidth / 3 - 130, canvasHeight - 150);
+    text(" (Q): Period in Quarantine ", canvasWidth / 4 - 130, canvasHeight - 220);
+    text(" (N): Period not in Quarantine ", canvasWidth / 4 - 130, canvasHeight - 150);
   } else {
     text(" (Q): Period in Quarantine ", canvasWidth / 2 - 200 - mobile * 200, canvasHeight - 10);
     text(" (N): Period not in Quarantine ", canvasWidth / 2, canvasHeight - 10);
@@ -741,15 +741,15 @@ function makeSummary() {
   textSize(26);
   if (mobile) textSize(35)
   fill(0, 0, 0);
-  text("Statistics", canvasWidth * 0.85 - mobile * 250, (3*mobile) *canvasHeight / 4 );
+  text("Statistics", canvasWidth * 0.85 - mobile * 250, (3*mobile+1) *canvasHeight / 4 );
   textSize(13)
   if (mobile) textSize(25)
-  text("Days elapsed: " + currentDay, canvasWidth * 0.85 - mobile * 250, (2*mobile + 1) *canvasHeight / 4 + 40 + mobile * 15);
-  text("Total Infections: " + maxInfected + " (" + infectedPer + "%)", canvasWidth * 0.85 - mobile * 250, (3*mobile) *canvasHeight / 4 + 70 + mobile * 30);
-  text("Total Deaths: " + dead + " (" + deadPer + "%)", canvasWidth * 0.85 - mobile * 250, (2*mobile + 1) *canvasHeight / 4 + 100 + mobile * 45);
-  text("Total Recovered: " + recovered + " (" + recoveredPer + "%)", canvasWidth * 0.85 - mobile * 250, (2*mobile + 1)*canvasHeight / 4 + 130 + mobile * 60);
-  text("Hospital Deficiency: " + daysOverCapacity +" days", canvasWidth * 0.85 - mobile * 250, (2*mobile + 1)*canvasHeight / 4 + 160 + mobile * 75);
-  text("Untreated cases: " + (peakInfection - hospitalCapacity).toString()+ " (" + untreatedPer + "%)",canvasWidth * 0.85 - mobile * 250, (2*mobile + 1) *canvasHeight / 4 + 190 + mobile * 90);
+  text("Days elapsed: " + currentDay, canvasWidth * 0.8 - mobile * 250, (2*mobile + 1) *canvasHeight / 3.7 + 40 + mobile * 15);
+  text("Total Infections: " + maxInfected + " (" + infectedPer + "%)", canvasWidth * 0.85 - mobile * 250, (2*mobile+1) *canvasHeight / 4 + 70 + mobile * 30);
+  text("Total Deaths: " + dead + " (" + deadPer + "%)", canvasWidth * 0.8 - mobile * 250, (2*mobile + 1) *canvasHeight / 3.7 + 100 + mobile * 45);
+  text("Total Recovered: " + recovered + " (" + recoveredPer + "%)", canvasWidth * 0.8 - mobile * 250, (2*mobile + 1)*canvasHeight / 4 + 130 + mobile * 60);
+  text("Hospital Deficiency: " + daysOverCapacity +" days", canvasWidth * 0.8 - mobile * 250, (2*mobile + 1)*canvasHeight / 4 + 160 + mobile * 75);
+  text("Untreated cases: " + (peakInfection - hospitalCapacity).toString()+ " (" + untreatedPer + "%)",canvasWidth * 0.8 - mobile * 250, (2*mobile + 1) *canvasHeight / 4 + 190 + mobile * 90);
 }
 
 function changeMobile() {
@@ -858,9 +858,3 @@ async function getDataset() {
 
 
 // ISOLATION OF INFECTED CASES
-
-// ADD NEW INFECTIONS PER DAY
-
-// MOVE STATISTICS TO THE LEFT
-
-// ADD MORE STATISTICS
