@@ -390,13 +390,16 @@ function updateText() {
 
   noStroke();
   textSize(28);
+  if(mobile) textSize(34)
   fill(0, 0, 0, 180);
   text('Day ' + currentDay, 10, 30);
   textSize(15);
+  if(mobile) textSize(21)
   text('Initial Population: ' + populationSize, 10, 55);
   text('Hospitals Capacity: ' + hospitalCapacity, 10, 75);
   fill(0, 0, 0, 180);
   textSize(20);
+  if(mobile) textSize(26)
   text('State: ', 6, canvasHeight - 8.3);
   if (quarantine) {
     fill(quarantineColor());
@@ -408,7 +411,7 @@ function updateText() {
   makeTriangle();
   noStroke();
   textSize(20);
-  if(mobile) textSize(26);
+  if(mobile) textSize(28);
   fill(healthyColor);
   text('Healthy: ' + healthy, canvasWidth - 140, 25);
   fill(infectedColor);
