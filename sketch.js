@@ -85,7 +85,7 @@ function setup() {
   canvasHeight = windowHeight;
   populationSize = Math.floor(Math.max(canvasWidth, canvasHeight) / 200) * 100;
   populationSize = mobile ? Math.min(400, populationSize) : populationSize;
-  personSize = 10;
+  personSize = 10+mobile * 10;
   offset = personSize / 2;
 
   //
@@ -151,7 +151,8 @@ function welcomePage() {
 
   fill(0, 0, 0, 200);
   noStroke();
-  let ts = min(20, canvasWidth / 46);
+  let ts = min(16, canvasWidth / 46);
+  if(mobile && windowWidth < windowHeight) ts = 20;
   textSize(ts+10);
   text("#StayAtHome",canvasWidth/2-5*ts,canvasHeight/18)
   textSize(ts+7);
@@ -553,7 +554,13 @@ function makeChart() {
 
           }
         }]
-      }
+      },
+      legend: {
+            labels: {
+                // This more specific font property overrides the global property
+                fontSize: mobile ? 30 : 12
+            }
+        }
     }
   });
 }
@@ -675,8 +682,8 @@ function fadeIn() {
   if (endResult)
     text("-- Congratulations to the survivors! --", canvasWidth / 2 - 105, canvasHeight / 7 + 2);
   else
-    text("--Click on each category (colored box) to hide/show chart lines--", canvasWidth / 2 - 200 - mobile * 90, canvasHeight / 7 + 2);
-  if(mobile){
+    text("--Click on each category (colored box) to hide/show chart lines--", canvasWidth / 2 - 200 - mobile * 100, canvasHeight / 7 + 2);
+  if(mobile && windowHeight > windowWidth){
    text(" (Q): Period in Quarantine ", canvasWidth / 2 - 130, canvasHeight - 130);
   text(" (N): Period not in Quarantine ", canvasWidth / 2 - 130, canvasHeight - 80);
   }
