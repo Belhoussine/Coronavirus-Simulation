@@ -152,7 +152,7 @@ function welcomePage() {
   fill(0, 0, 0, 200);
   noStroke();
   let ts = min(16, canvasWidth / 46);
-  if (mobile ) ts = 30;
+  if (mobile ) ts = 24;
   textSize(ts + 10);
   text("#StayAtHome", canvasWidth / 2 - 5 * ts, canvasHeight / 18)
   textSize(ts + 7);
@@ -285,7 +285,7 @@ function welcomePage() {
 function makeStartButton() {
 
   button = createButton('Start Simulation');
-  button.position(canvasWidth / 2, canvasHeight * 0.95);
+  button.position(canvasWidth / 2 - mobile * 100, canvasHeight * 0.95);
   button.style('margin', '0');
   if (!mobile)
     button.style('transform', 'translate(-40%, 0%)');
@@ -569,7 +569,7 @@ function makeChart() {
 
 function makeButton() {
   button = createButton('Continue');
-  button.position(canvasWidth - 100 - mobile * 30, canvasHeight / 30);
+  button.position(canvasWidth - 100 - mobile * 100, canvasHeight / 30);
   button.style('margin', '0');
   if (!mobile)
     button.style('transform', 'translate(-40%, 0%)');
@@ -810,7 +810,3 @@ function changeState() {
 // MOVE STATISTICS TO THE LEFT
 
 // ADD MORE STATISTICS
-
-// ADD WELCOME PAGE
-
-// ADD TACTILE FOR PHONE
