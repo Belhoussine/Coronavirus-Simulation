@@ -395,7 +395,7 @@ function updateText() {
   textSize(28);
   if(mobile) textSize(40)
   fill(0, 0, 0, 180);
-  text('Day ' + currentDay, 10 + mobile * 30, 70 + mobile * 30);
+  text('Day ' + currentDay, 10 + mobile * 30, 30 + mobile * 30);
   textSize(15);
   if(mobile) textSize(27)
   text('Initial Population: ' + populationSize, 10 + mobile * 30, 55 + mobile * 45);
@@ -406,10 +406,10 @@ function updateText() {
   text('State: ', 6 + mobile * 30, canvasHeight - 8.3 - mobile * 30);
   if (quarantine) {
     fill(quarantineColor());
-    text('Quarantine ', 59 + mobile * 65, canvasHeight - 8 - mobile * 30);
+    text('Quarantine ', 59 + mobile * 80, canvasHeight - 8 - mobile * 30);
   } else {
     fill(noquarantineColor());
-    text('No Quarantine ', 59 + mobile * 65, canvasHeight - 8 - mobile * 30);
+    text('No Quarantine ', 59 + mobile * 80, canvasHeight - 8 - mobile * 30);
   }
   makeTriangle();
   noStroke();
@@ -675,10 +675,10 @@ function fadeIn() {
   if (endResult)
     text("-- Congratulations to the survivors! --", canvasWidth / 2 - 105, canvasHeight / 7 + 2);
   else
-    text("--Click on each category (colored box) to hide/show chart lines--", canvasWidth / 2 - 200 - mobile * 60, canvasHeight / 7 + 2);
+    text("--Click on each category (colored box) to hide/show chart lines--", canvasWidth / 2 - 200 - mobile * 90, canvasHeight / 7 + 2);
   if(mobile){
-   text(" (Q): Period in Quarantine ", canvasWidth / 2 - 100, canvasHeight - 100);
-  text(" (N): Period not in Quarantine ", canvasWidth / 2 - 100, canvasHeight - 50);
+   text(" (Q): Period in Quarantine ", canvasWidth / 2 - 130, canvasHeight - 130);
+  text(" (N): Period not in Quarantine ", canvasWidth / 2 - 130, canvasHeight - 80);
   }
   else{
   text(" (Q): Period in Quarantine ", canvasWidth / 2 - 200, canvasHeight - 10 );
