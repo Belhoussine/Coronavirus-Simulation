@@ -158,7 +158,7 @@ function welcomePage() {
   fill(0, 0, 0, 200);
   noStroke();
   let ts = min(16, canvasWidth / 46);
-  if (mobile) ts = 22;
+  if (mobile) ts = 23;
   textSize(ts + 10);
   text("#StayAtHome", canvasWidth / 2 - 5 * ts, canvasHeight / 18)
   textSize(ts + 7);
@@ -179,17 +179,17 @@ function welcomePage() {
       text("You can change quarantine modes by clicking on          (Bottom of the screen).", 15, canvasHeight / 8 + ts * 9)
     text("Bi-weekly charts will be displayed as well as a summary at the end.", 15, canvasHeight / 8 + ts * 10.5)
     fill(healthyColor);
-    circle(ts * 21, canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
+    circle(ts * (21-2*mobile) , canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
     fill(infectedColor);
-    circle(ts * 26.2, canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
+    circle(ts * (26.2-2*mobile), canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
     fill(recoveredColor);
-    circle(ts * 31.5, canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
+    circle(ts * (31.5-2*mobile), canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
     fill(deadColor);
-    circle(ts * 40.1, canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
+    circle(ts * (40.1-2*mobile), canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
     fill(255, 255, 255, 0)
     stroke(255, 204, 0);
     strokeWeight(1.7);
-    circle(ts * 19.3, canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * 1(9.3-2*mobile), canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
     noStroke();
     fill(0, 0, 0, 170);
 
@@ -210,17 +210,17 @@ function welcomePage() {
       text("Le mode de quarantaine peut être changé en cliquant sur            (Bas de l'écran).", 15, canvasHeight * 0.58 + ts * 9)
     text("Des graphiques bihebdomadaires seront affichés ainsi qu'un résumé à la fin.", 15, canvasHeight * 0.58 + ts * 10.5)
     fill(healthyColor);
-    circle(ts * 15.5, canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
+    circle(ts * (15.5-2*mobile), canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
     fill(infectedColor);
-    circle(ts * 20.5, canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
+    circle(ts * (20.5-2*mobile), canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
     fill(recoveredColor);
-    circle(ts * 26.3, canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
+    circle(ts * (26.3-2*mobile), canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
     fill(deadColor);
-    circle(ts * 32.7, canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
+    circle(ts * (32.7-2*mobile), canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
     fill(255, 255, 255, 0)
     stroke(255, 204, 0);
     strokeWeight(1.7);
-    circle(ts * 23.2, canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (23.2-2*mobile), canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
     noStroke();
 
     fill(infectedColor);
@@ -238,17 +238,17 @@ function welcomePage() {
       text("You can change quarantine modes by clicking on          (Bottom of the screen).", 15, canvasHeight / 8 + ts * 10.5)
     text("Bi-weekly charts will be displayed as well as a summary at the end.", 15, canvasHeight / 8 + ts * 12)
     fill(healthyColor);
-    circle(ts * 21, canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (21-2*mobile), canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
     fill(infectedColor);
-    circle(ts * 26.2, canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (26.2-2*mobile), canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
     fill(recoveredColor);
-    circle(ts * 31.7, canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (31.7-2*mobile), canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
     fill(deadColor);
-    circle(ts * 40.1, canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (40.1-2*mobile), canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
     fill(255, 255, 255, 0)
     stroke(255, 204, 0);
     strokeWeight(1.7);
-    circle(ts * 25, canvasHeight / 8 + ts * 9 - 4, ts * 0.7)
+    circle(ts * (25-2*mobile), canvasHeight / 8 + ts * 9 - 4, ts * 0.7)
     noStroke();
 
     fill(infectedColor);
@@ -269,17 +269,17 @@ function welcomePage() {
       text("Le mode de quarantaine peut être changé en cliquant sur            (Bas de l'écran).", 15, canvasHeight * 0.58 + ts * 10.5)
     text("Des graphiques bihebdomadaires seront affichés ainsi qu'un résumé à la fin.", 15, canvasHeight * 0.58 + ts * 12)
     fill(healthyColor);
-    circle(ts * 15.8, canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (15.8-2*mobile), canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
     fill(infectedColor);
-    circle(ts * 20.8, canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (20.8-2*mobile), canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
     fill(recoveredColor);
-    circle(ts * 26.4, canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (26.4-2*mobile), canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
     fill(deadColor);
-    circle(ts * 33, canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (33-2*mobile), canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
     fill(255, 255, 255, 0)
     stroke(255, 204, 0);
     strokeWeight(1.7);
-    circle(ts * 23.4, canvasHeight * 0.58 + ts * 9 - 4, ts * 0.7)
+    circle(ts * (23.4-2*mobile), canvasHeight * 0.58 + ts * 9 - 4, ts * 0.7)
     noStroke();
 
     fill(infectedColor);
@@ -354,7 +354,7 @@ function _main() {
   if (healthy > 5)
     summary();
   else if (endFlag) {
-    speed *= 2;
+    speed *= (2+mobile);
     endFlag = false;
   }
 }
@@ -737,16 +737,16 @@ function makeSummary() {
   let infectedPer = (100 * maxInfected / populationSize).toFixed(2);
   let deadPer = (100 * dead / populationSize).toFixed(2);
   let recoveredPer = (100 * recovered / maxInfected).toFixed(2);
-  let untreatedPer = (100 * (peakInfection - hospitalCapacity) / infected).toFixed(2);
+  let untreatedPer = (100 * Math.max(0,(peakInfection - hospitalCapacity)) / maxInfected).toFixed(2);
   textSize(26);
   if (mobile) textSize(35)
   fill(0, 0, 0);
   text("Statistics", canvasWidth * 0.85 - mobile * 250, (3*mobile+1) *canvasHeight / 4 );
   textSize(13)
   if (mobile) textSize(25)
-  text("Days elapsed: " + currentDay, canvasWidth * 0.8 - mobile * 250, (2*mobile + 1) *canvasHeight / 3.7 + 40 + mobile * 15);
-  text("Total Infections: " + maxInfected + " (" + infectedPer + "%)", canvasWidth * 0.85 - mobile * 250, (2*mobile+1) *canvasHeight / 4 + 70 + mobile * 30);
-  text("Total Deaths: " + dead + " (" + deadPer + "%)", canvasWidth * 0.8 - mobile * 250, (2*mobile + 1) *canvasHeight / 3.7 + 100 + mobile * 45);
+  text("Days elapsed: " + currentDay + "(" +Math.ceil(currentDay / 7)+" weeks)", canvasWidth * 0.8 - mobile * 250, (2*mobile + 1) *canvasHeight / 4 + 40 + mobile * 15);
+  text("Total Infections: " + maxInfected + " (" + infectedPer + "%)", canvasWidth * 0.8 - mobile * 250, (2*mobile+1) *canvasHeight / 4 + 70 + mobile * 30);
+  text("Total Deaths: " + dead + " (" + deadPer + "%)", canvasWidth * 0.8 - mobile * 250, (2*mobile + 1) *canvasHeight / 4 + 100 + mobile * 45);
   text("Total Recovered: " + recovered + " (" + recoveredPer + "%)", canvasWidth * 0.8 - mobile * 250, (2*mobile + 1)*canvasHeight / 4 + 130 + mobile * 60);
   text("Hospital Deficiency: " + daysOverCapacity +" days", canvasWidth * 0.8 - mobile * 250, (2*mobile + 1)*canvasHeight / 4 + 160 + mobile * 75);
   text("Untreated cases: " + (peakInfection - hospitalCapacity).toString()+ " (" + untreatedPer + "%)",canvasWidth * 0.8 - mobile * 250, (2*mobile + 1) *canvasHeight / 4 + 190 + mobile * 90);
@@ -856,5 +856,10 @@ async function getDataset() {
   return data[4];
 }
 
+function windowResized() {
+  canvasWidth = windowWidth;
+  canvasHeight = windowHeight;
+  resizeCanvas(windowWidth, windowHeight);
+}
 
 // ISOLATION OF INFECTED CASES
