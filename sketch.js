@@ -79,13 +79,13 @@ function setup() {
   background(255);
   population = [];
   insideTriangle = false;
-  mobile = isMobile();
+  mobile = isMobile() && windowWidth < windowHeight;
   //
   canvasWidth = windowWidth;
   canvasHeight = windowHeight;
   populationSize = Math.floor(Math.max(canvasWidth, canvasHeight) / 200) * 100;
   populationSize = mobile ? Math.min(400, populationSize) : populationSize;
-  personSize = 10+mobile * 10;
+  personSize = 10 + mobile * 10;
   offset = personSize / 2;
 
   //
@@ -98,14 +98,14 @@ function setup() {
   ty3 = canvasHeight + 1;
   k = 0;
   //
-  infected = 3 + 2 * mobile;
+  infected = 3 + 4 * mobile;
   maxInfected = infected;
   healthy = populationSize - infected;
   recovered = 0;
   dead = 0;
   mvFreq = 100;
   speed = 1.5;
-  if(mobile) speed = 2;
+  if (mobile) speed = 2;
   quarantine = false;
   quarantineStop = 0.025;
   quarantineMov = 0.012;
@@ -152,11 +152,11 @@ function welcomePage() {
   fill(0, 0, 0, 200);
   noStroke();
   let ts = min(16, canvasWidth / 46);
-  if(mobile && windowWidth < windowHeight) ts = 20;
-  textSize(ts+10);
-  text("#StayAtHome",canvasWidth/2-5*ts,canvasHeight/18)
-  textSize(ts+7);
-  text("#RestezChezVous",canvasWidth/2-5*ts,canvasHeight*0.53)
+  if (mobile ) ts = 30;
+  textSize(ts + 10);
+  text("#StayAtHome", canvasWidth / 2 - 5 * ts, canvasHeight / 18)
+  textSize(ts + 7);
+  text("#RestezChezVous", canvasWidth / 2 - 5 * ts, canvasHeight * 0.53)
   fill(0, 0, 0, 170);
   textSize(ts);
   text("The following is a simulation of the spread of the coronavirus within a population.", 15, canvasHeight / 8)
@@ -167,10 +167,10 @@ function welcomePage() {
     text("The ultimate goal of this simulation is to raise awareness, and to show that staying at home is the best approach against this virus.", 15, canvasHeight / 8 + ts * 4.5)
     text("During the simulation, we will keep track of       healthy,      infected,      recovered, and       dead individuals.", 15, canvasHeight / 8 + ts * 6)
     text("Individuals at home have a yellow shell       preventing them from getting infected.", 15, canvasHeight / 8 + ts * 7.5)
-    if(mobile)
+    if (mobile)
       text("You can change quarantine modes by touching the screen.", 15, canvasHeight / 8 + ts * 9)
     else
-    text("You can change quarantine modes by clicking on          (Bottom of the screen).", 15, canvasHeight / 8 + ts * 9)
+      text("You can change quarantine modes by clicking on          (Bottom of the screen).", 15, canvasHeight / 8 + ts * 9)
     text("Bi-weekly charts will be displayed as well as a summary at the end.", 15, canvasHeight / 8 + ts * 10.5)
     fill(healthyColor);
     circle(ts * 21, canvasHeight / 8 + ts * 6 - 4, ts * 0.6)
@@ -186,10 +186,10 @@ function welcomePage() {
     circle(ts * 19.3, canvasHeight / 8 + ts * 7.5 - 4, ts * 0.6)
     noStroke();
     fill(0, 0, 0, 170);
-    
+
     fill(infectedColor);
-    if(!mobile)
-    triangle(ts*25-9,canvasHeight / 8 + ts * 9 - 10,ts * 25 -15,canvasHeight / 8 + ts * 9 +1, ts * 25-3,canvasHeight / 8 + ts * 9 +1)
+    if (!mobile)
+      triangle(ts * 25 - 9, canvasHeight / 8 + ts * 9 - 10, ts * 25 - 15, canvasHeight / 8 + ts * 9 + 1, ts * 25 - 3, canvasHeight / 8 + ts * 9 + 1)
     fill(0, 0, 0, 170);
     //////////
     text("Ceci est une simulation concernant la propagation du coronavirus au sein d'une population.", 15, canvasHeight * 0.58)
@@ -197,14 +197,14 @@ function welcomePage() {
     text("En imitant le comportement humain, celle ci peut aider à prédire l'avenir de nos pays.", 15, canvasHeight * 0.58 + ts * 3)
     text("Le but ultime de cette simulation est de sensibiliser et de montrer que rester à la maison est la meilleure approche contre ce virus.", 15, canvasHeight * 0.58 + ts * 4.5)
     text("Nous suiverons les personnes       saines,      infectées,      guéries, et      décédées.", 15, canvasHeight * 0.58 + ts * 6)
-    text("Les individus à la maison ont une coquille jaune       qui les empêche d'être infectés.", 15, canvasHeight* 0.58 + ts * 7.5)
-    if(mobile)
+    text("Les individus à la maison ont une coquille jaune       qui les empêche d'être infectés.", 15, canvasHeight * 0.58 + ts * 7.5)
+    if (mobile)
       text("Le mode de quarantaine peut être changé en touchant l'écran", 15, canvasHeight * 0.58 + ts * 9)
     else
-    text("Le mode de quarantaine peut être changé en cliquant sur            (Bas de l'écran).", 15, canvasHeight * 0.58 + ts * 9)
-    text("Des graphiques bihebdomadaires seront affichés ainsi qu'un résumé à la fin.", 15, canvasHeight * 0.58+ ts * 10.5)
+      text("Le mode de quarantaine peut être changé en cliquant sur            (Bas de l'écran).", 15, canvasHeight * 0.58 + ts * 9)
+    text("Des graphiques bihebdomadaires seront affichés ainsi qu'un résumé à la fin.", 15, canvasHeight * 0.58 + ts * 10.5)
     fill(healthyColor);
-    circle(ts * 15.5, canvasHeight * 0.58+ ts * 6 - 4, ts * 0.7)
+    circle(ts * 15.5, canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
     fill(infectedColor);
     circle(ts * 20.5, canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
     fill(recoveredColor);
@@ -216,20 +216,20 @@ function welcomePage() {
     strokeWeight(1.7);
     circle(ts * 23.2, canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
     noStroke();
-    
+
     fill(infectedColor);
-    if(!mobile)
-    triangle(ts*29-7,canvasHeight * 0.58 + ts * 9 - 10,ts * 29 -13,canvasHeight * 0.58+ ts * 9 +1, ts * 29-1,canvasHeight * 0.58 + ts * 9+1)
+    if (!mobile)
+      triangle(ts * 29 - 7, canvasHeight * 0.58 + ts * 9 - 10, ts * 29 - 13, canvasHeight * 0.58 + ts * 9 + 1, ts * 29 - 1, canvasHeight * 0.58 + ts * 9 + 1)
 
   } else {
     text("The ultimate goal of this simulation is to raise awareness, and to show that staying at home is the ", 15, canvasHeight / 8 + ts * 4.5)
     text("best approach against this virus.", 15, canvasHeight / 8 + ts * 6)
     text("During the simulation, we will keep track of       healthy,      infected,      recovered, and      dead ", 15, canvasHeight / 8 + ts * 7.5)
     text("individuals. Individuals at home have a yellow shell         preventing them from getting infected.", 15, canvasHeight / 8 + ts * 9)
-    if(mobile)
+    if (mobile)
       text("You can change quarantine modes by touching the screen.", 15, canvasHeight / 8 + ts * 10.5)
     else
-    text("You can change quarantine modes by clicking on          (Bottom of the screen).", 15, canvasHeight / 8 + ts * 10.5)
+      text("You can change quarantine modes by clicking on          (Bottom of the screen).", 15, canvasHeight / 8 + ts * 10.5)
     text("Bi-weekly charts will be displayed as well as a summary at the end.", 15, canvasHeight / 8 + ts * 12)
     fill(healthyColor);
     circle(ts * 21, canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
@@ -244,10 +244,10 @@ function welcomePage() {
     strokeWeight(1.7);
     circle(ts * 25, canvasHeight / 8 + ts * 9 - 4, ts * 0.7)
     noStroke();
-    
+
     fill(infectedColor);
-    if(!mobile)
-    triangle(ts*25-7,canvasHeight / 8 + ts * 10.5 - 10,ts * 25 -13,canvasHeight / 8 + ts * 10.5 +1, ts * 25-1,canvasHeight / 8 + ts * 10.5 +1)
+    if (!mobile)
+      triangle(ts * 25 - 7, canvasHeight / 8 + ts * 10.5 - 10, ts * 25 - 13, canvasHeight / 8 + ts * 10.5 + 1, ts * 25 - 1, canvasHeight / 8 + ts * 10.5 + 1)
     fill(0, 0, 0, 170);
     //////////
     text("Ceci est une simulation concernant la propagation du coronavirus au sein d'une population.", 15, canvasHeight * 0.58)
@@ -256,14 +256,14 @@ function welcomePage() {
     text("Le but ultime de cette simulation est de sensibiliser et de montrer que rester à la maison est la ", 15, canvasHeight * 0.58 + ts * 4.5)
     text("meilleure approche contre ce virus.", 15, canvasHeight * 0.58 + ts * 6)
     text("Nous suiverons les personnes       saines,      infectées,      guéries, et      décédées.", 15, canvasHeight * 0.58 + ts * 7.5)
-    text("Les individus à la maison ont une coquille jaune       qui les empêche d'être infectés.", 15, canvasHeight* 0.58 + ts * 9)
+    text("Les individus à la maison ont une coquille jaune       qui les empêche d'être infectés.", 15, canvasHeight * 0.58 + ts * 9)
     if (mobile)
       text("Le mode de quarantaine peut être changé en touchant l'écran.", 15, canvasHeight * 0.58 + ts * 10.5)
     else
-    text("Le mode de quarantaine peut être changé en cliquant sur            (Bas de l'écran).", 15, canvasHeight * 0.58 + ts * 10.5)
-    text("Des graphiques bihebdomadaires seront affichés ainsi qu'un résumé à la fin.", 15, canvasHeight * 0.58+ ts * 12)
+      text("Le mode de quarantaine peut être changé en cliquant sur            (Bas de l'écran).", 15, canvasHeight * 0.58 + ts * 10.5)
+    text("Des graphiques bihebdomadaires seront affichés ainsi qu'un résumé à la fin.", 15, canvasHeight * 0.58 + ts * 12)
     fill(healthyColor);
-    circle(ts * 15.8, canvasHeight * 0.58+ ts * 7.5 - 4, ts * 0.7)
+    circle(ts * 15.8, canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
     fill(infectedColor);
     circle(ts * 20.8, canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
     fill(recoveredColor);
@@ -275,10 +275,10 @@ function welcomePage() {
     strokeWeight(1.7);
     circle(ts * 23.4, canvasHeight * 0.58 + ts * 9 - 4, ts * 0.7)
     noStroke();
-    
+
     fill(infectedColor);
-    if(!mobile)
-    triangle(ts*29-7,canvasHeight * 0.58 + ts * 10.5 - 10,ts * 29 -13,canvasHeight * 0.58+ ts * 10.5 +1, ts * 29-1,canvasHeight * 0.58 + ts * 10.5 +1)
+    if (!mobile)
+      triangle(ts * 29 - 7, canvasHeight * 0.58 + ts * 10.5 - 10, ts * 29 - 13, canvasHeight * 0.58 + ts * 10.5 + 1, ts * 29 - 1, canvasHeight * 0.58 + ts * 10.5 + 1)
   }
 }
 
@@ -287,11 +287,11 @@ function makeStartButton() {
   button = createButton('Start Simulation');
   button.position(canvasWidth / 2, canvasHeight * 0.95);
   button.style('margin', '0');
-  if(mobile)
-  button.style('transform', 'translate(-40%, 0%)');
+  if (!mobile)
+    button.style('transform', 'translate(-40%, 0%)');
   button.style('letter-spacing', '0.5px');
-  let f= '10px';
-  if(mobile) f = '24px';
+  let f = '14px';
+  if (mobile) f = '24px';
   button.style('font-size', f);
   button.style('position', 'absolute');
   button.style('border', 'none');
@@ -363,7 +363,7 @@ function draw() {
     movingId = setInterval(main, 1000 / fRate);
     started = false;
   }
-  if (infected == 0 ) {
+  if (infected == 0) {
     endResult = true;
     clearInterval(movingId);
     clearInterval(updatingId);
@@ -394,16 +394,16 @@ function updateText() {
 
   noStroke();
   textSize(28);
-  if(mobile) textSize(40)
+  if (mobile) textSize(40)
   fill(0, 0, 0, 180);
   text('Day ' + currentDay, 10 + mobile * 30, 30 + mobile * 30);
   textSize(15);
-  if(mobile) textSize(27)
+  if (mobile) textSize(27)
   text('Initial Population: ' + populationSize, 10 + mobile * 30, 55 + mobile * 45);
   text('Hospitals Capacity: ' + hospitalCapacity, 10 + mobile * 30, 75 + mobile * 55);
   fill(0, 0, 0, 180);
   textSize(20);
-  if(mobile) textSize(36)
+  if (mobile) textSize(36)
   text('State: ', 6 + mobile * 30, canvasHeight - 8.3 - mobile * 30);
   if (quarantine) {
     fill(quarantineColor());
@@ -415,15 +415,15 @@ function updateText() {
   makeTriangle();
   noStroke();
   textSize(20);
-  if(mobile) textSize(32);
+  if (mobile) textSize(32);
   fill(healthyColor);
-  text('Healthy: ' + healthy, canvasWidth - 140 - mobile * 85 , 25 + mobile *20);
+  text('Healthy: ' + healthy, canvasWidth - 140 - mobile * 85, 25 + mobile * 20);
   fill(infectedColor);
-  text('Infected: ' + infected, canvasWidth - 140 - mobile *85 , 50+ mobile *35);
+  text('Infected: ' + infected, canvasWidth - 140 - mobile * 85, 50 + mobile * 35);
   fill(recoveredColor);
-  text('Recovered: ' + recovered, canvasWidth - 140 - mobile * 85 , 75+ mobile *50);
+  text('Recovered: ' + recovered, canvasWidth - 140 - mobile * 85, 75 + mobile * 50);
   fill(deadColor);
-  text('Dead: ' + dead, canvasWidth - 140 - mobile * 85 , 100+ mobile *65);
+  text('Dead: ' + dead, canvasWidth - 140 - mobile * 85, 100 + mobile * 65);
 }
 
 //Creates a population
@@ -503,9 +503,10 @@ function makeChart() {
     document.getElementById("chart-container").style.width = (canvasWidth * 0.9).toString() + "px";
   }
 
-  document.getElementById("chart-container").style.top = ((canvasHeight / 6)+mobile * 30).toString() + "px";
-  if(mobile){ 
-    document.getElementById("chart-container").style.bottom = (canvasHeight / 5).toString() + "px";}
+  document.getElementById("chart-container").style.top = ((canvasHeight / 6) + mobile * 30).toString() + "px";
+  if (mobile) {
+    document.getElementById("chart-container").style.bottom = (canvasHeight / 5).toString() + "px";
+  }
   var chartCanvas = document.createElement("CANVAS");
   chartCanvas.id = 'myChart';
   document.getElementById("chart-container").appendChild(chartCanvas)
@@ -546,33 +547,34 @@ function makeChart() {
       scales: {
         yAxes: [{
           ticks: {
-            beginAtZero: true
+            beginAtZero: true,
+            fontSize: mobile ? 22 : 14
           }
         }],
         xAxes: [{
           ticks: {
-
+            fontSize: mobile ? 22 : 14
           }
         }]
       },
       legend: {
-            labels: {
-                // This more specific font property overrides the global property
-                fontSize: mobile ? 30 : 12
-            }
+        labels: {
+          // This more specific font property overrides the global property
+          fontSize: mobile ? 22 : 14
         }
+      }
     }
   });
 }
 
 function makeButton() {
   button = createButton('Continue');
-  button.position(canvasWidth - 100 - mobile * 30, canvasHeight / 30 );
+  button.position(canvasWidth - 100 - mobile * 30, canvasHeight / 30);
   button.style('margin', '0');
-  if(mobile)
-  button.style('transform', 'translate(-40%, 0%)');
-  let f = '12px';
-  if(mobile) f = '25px';
+  if (!mobile)
+    button.style('transform', 'translate(-40%, 0%)');
+  let f = '14px';
+  if (mobile) f = '25px';
   button.style('font-size', f);
   button.style('position', 'absolute');
   button.style('border', 'none');
@@ -625,10 +627,10 @@ function makeRestartButton() {
   button = createButton('Restart');
   button.position(canvasWidth - 90, canvasHeight / 30);
   button.style('margin', '0');
-  if(mobile)
-  button.style('transform', 'translate(-40%, 0%)');
-  let f = '12px';
-  if(mobile) f = '25px';
+  if (!mobile)
+    button.style('transform', 'translate(-40%, 0%)');
+  let f = '14px';
+  if (mobile) f = '25px';
   button.style('font-size', f);
   button.style('position', 'absolute');
   button.style('border', 'none');
@@ -671,25 +673,24 @@ function makeRestartButton() {
 function fadeIn() {
   background(255, 255, 255, 35);
   textSize(40);
-  if(mobile) textSize(48)
+  if (mobile) textSize(48)
   fill(0, 0, 0, 50);
   if (endResult)
     text('Summary', canvasWidth / 2 - 80, canvasHeight / 10);
   else
     text('Week ' + Math.ceil(currentDay / 7), canvasWidth / 2 - 70, canvasHeight / 10);
   textSize(14);
-  if(mobile) textSize(25)
+  if (mobile) textSize(25)
   if (endResult)
     text("-- Congratulations to the survivors! --", canvasWidth / 2 - 105, canvasHeight / 7 + 2);
   else
-    text("--Click on each category (colored box) to hide/show chart lines--", canvasWidth / 2 - 200 - mobile * 100, canvasHeight / 7 + 2);
-  if(mobile && windowHeight > windowWidth){
-   text(" (Q): Period in Quarantine ", canvasWidth / 2 - 130, canvasHeight - 130);
-  text(" (N): Period not in Quarantine ", canvasWidth / 2 - 130, canvasHeight - 80);
-  }
-  else{
-  text(" (Q): Period in Quarantine ", canvasWidth / 2 - 200, canvasHeight - 10 );
-  text(" (N): Period not in Quarantine ", canvasWidth / 2, canvasHeight - 10 );
+    text("--Click on each category (colored box) to hide/show chart lines--", canvasWidth / 2 - 200 - mobile * 115, canvasHeight / 7 + 2);
+  if (mobile) {
+    text(" (Q): Period in Quarantine ", canvasWidth / 2 - 130, canvasHeight - 130);
+    text(" (N): Period not in Quarantine ", canvasWidth / 2 - 130, canvasHeight - 80);
+  } else {
+    text(" (Q): Period in Quarantine ", canvasWidth / 2 - 200 - mobile * 200, canvasHeight - 10);
+    text(" (N): Period not in Quarantine ", canvasWidth / 2, canvasHeight - 10);
   }
 }
 
@@ -728,11 +729,13 @@ function makeSummary() {
   text("Total Deaths: " + dead + " (" + deadPer + "%)", canvasWidth - 211, canvasHeight / 4 + 100);
   text("Total Recovered: " + recovered + " (" + recoveredPer + "%)", canvasWidth - 211, canvasHeight / 4 + 130);
 }
-function changeMobile(){
-  if(!summarizing && mobile){
+
+function changeMobile() {
+  if (!summarizing && mobile) {
     changeState();
   }
 }
+
 function mouseClicked(e) {
   if (inTriangle(e)) {
     changeState();
