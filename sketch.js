@@ -515,7 +515,7 @@ function summary() {
 function makeChart() {
   if (endResult) {
     document.getElementById("chart-container").style.width = (canvasWidth * (0.75+ mobile /6)).toString() + "px";
-    document.getElementById("chart-container").style.right = (canvasWidth * (0.25- mobile /6).toString() + "px";
+    document.getElementById("chart-container").style.right = (canvasWidth * (0.25- mobile /6)).toString() + "px";
   } else {
     document.getElementById("chart-container").style.width = (canvasWidth * 0.9).toString() + "px";
   }
@@ -858,9 +858,3 @@ async function getDataset() {
 
 
 // ISOLATION OF INFECTED CASES
-
-// ADD NEW INFECTIONS PER DAY
-
-// MOVE STATISTICS TO THE LEFT
-
-// ADD MORE STATISTICS
