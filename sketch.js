@@ -84,7 +84,7 @@ function setup() {
   canvasWidth = windowWidth;
   canvasHeight = windowHeight;
   populationSize = Math.floor(Math.max(canvasWidth, canvasHeight) / 200) * 100;
-  populationSize = mobile ? Math.min(500, populationSize) : populationSize;
+  populationSize = mobile ? Math.min(400, populationSize) : populationSize;
   personSize = 10;
   offset = personSize / 2;
 
@@ -105,6 +105,7 @@ function setup() {
   dead = 0;
   mvFreq = 100;
   speed = 1.5;
+  if(mobile) speed = 2;
   quarantine = false;
   quarantineStop = 0.025;
   quarantineMov = 0.012;
@@ -288,7 +289,9 @@ function makeStartButton() {
   if(mobile)
   button.style('transform', 'translate(-40%, 0%)');
   button.style('letter-spacing', '0.5px');
-  button.style('font-size', '10px');
+  let f= '10px';
+  if(mobile) f = '24px';
+  button.style('font-size', f);
   button.style('position', 'absolute');
   button.style('border', 'none');
   button.style('background', '#505050');
@@ -390,36 +393,36 @@ function updateText() {
 
   noStroke();
   textSize(28);
-  if(mobile) textSize(34)
+  if(mobile) textSize(40)
   fill(0, 0, 0, 180);
   text('Day ' + currentDay, 10, 30);
   textSize(15);
-  if(mobile) textSize(21)
+  if(mobile) textSize(27)
   text('Initial Population: ' + populationSize, 10, 55);
   text('Hospitals Capacity: ' + hospitalCapacity, 10, 75);
   fill(0, 0, 0, 180);
   textSize(20);
-  if(mobile) textSize(26)
-  text('State: ', 6, canvasHeight - 8.3);
+  if(mobile) textSize(30)
+  text('State: ', 6 + mobile * 20, canvasHeight - 8.3 - mobile * 30);
   if (quarantine) {
     fill(quarantineColor());
-    text('Quarantine ', 59, canvasHeight - 8);
+    text('Quarantine ', 59 + mobile * 50, canvasHeight - 8 - mobile * 30);
   } else {
     fill(noquarantineColor());
-    text('No Quarantine ', 59, canvasHeight - 8);
+    text('No Quarantine ', 59 + mobile * 50, canvasHeight - 8 - mobile * 30);
   }
   makeTriangle();
   noStroke();
   textSize(20);
-  if(mobile) textSize(28);
+  if(mobile) textSize(32);
   fill(healthyColor);
-  text('Healthy: ' + healthy, canvasWidth - 140, 25);
+  text('Healthy: ' + healthy, canvasWidth - 140 - mobile * 70 , 25 + mobile *20);
   fill(infectedColor);
-  text('Infected: ' + infected, canvasWidth - 140, 50);
+  text('Infected: ' + infected, canvasWidth - 140 - mobile * 70 , 50+ mobile *20);
   fill(recoveredColor);
-  text('Recovered: ' + recovered, canvasWidth - 140, 75);
+  text('Recovered: ' + recovered, canvasWidth - 140 - mobile * 70 , 75+ mobile *20);
   fill(deadColor);
-  text('Dead: ' + dead, canvasWidth - 140, 100);
+  text('Dead: ' + dead, canvasWidth - 140 - mobile * 70 , 100+ mobile *20);
 }
 
 //Creates a population
@@ -500,6 +503,7 @@ function makeChart() {
   }
 
   document.getElementById("chart-container").style.top = (canvasHeight / 6).toString() + "px";
+  if(mobile) document.getElementById("chart-container").style.bottom = (canvasHeight / 5).toString() + "px";
   var chartCanvas = document.createElement("CANVAS");
   chartCanvas.id = 'myChart';
   document.getElementById("chart-container").appendChild(chartCanvas)
@@ -559,7 +563,9 @@ function makeButton() {
   button.style('margin', '0');
   if(mobile)
   button.style('transform', 'translate(-40%, 0%)');
-  button.style('font-size', '12px');
+  let f = '12px';
+  if(mobile) f = '25px';
+  button.style('font-size', f);
   button.style('position', 'absolute');
   button.style('border', 'none');
   button.style('background', '#505050');
@@ -613,7 +619,9 @@ function makeRestartButton() {
   button.style('margin', '0');
   if(mobile)
   button.style('transform', 'translate(-40%, 0%)');
-  button.style('font-size', '12px');
+  let f = '12px';
+  if(mobile) f = '25px';
+  button.style('font-size', f);
   button.style('position', 'absolute');
   button.style('border', 'none');
   button.style('background', '#505050');
@@ -655,18 +663,20 @@ function makeRestartButton() {
 function fadeIn() {
   background(255, 255, 255, 35);
   textSize(40);
+  if(mobile) textSize(48)
   fill(0, 0, 0, 50);
   if (endResult)
     text('Summary', canvasWidth / 2 - 80, canvasHeight / 10);
   else
     text('Week ' + Math.ceil(currentDay / 7), canvasWidth / 2 - 70, canvasHeight / 10);
   textSize(14);
+  if(mobile) textSize(25)
   if (endResult)
     text("-- Congratulations to the survivors! --", canvasWidth / 2 - 105, canvasHeight / 7 + 2);
   else
     text("--Click on each category (colored box) to hide/show chart lines--", canvasWidth / 2 - 200, canvasHeight / 7 + 2);
-  text(" (Q): Period in Quarantine ", canvasWidth / 2 - 200, canvasHeight - 10);
-  text(" (N): Period not in Quarantine ", canvasWidth / 2, canvasHeight - 10);
+  text(" (Q): Period in Quarantine ", canvasWidth / 2 - 200, canvasHeight - 10 - mobile * 10);
+  text(" (N): Period not in Quarantine ", canvasWidth / 2, canvasHeight - 10 - mobile * 10);
 }
 
 // Updating chart's labels and data points for every week
