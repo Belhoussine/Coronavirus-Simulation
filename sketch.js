@@ -170,6 +170,7 @@ function welcomePage() {
   text("It mimics human behavior, and should help make predictions regarding the future of our countries.", 15, canvasHeight / 8 + ts * 3)
 
   if (canvasWidth / 46 > 22) {
+    
     text("The ultimate goal of this simulation is to raise awareness, and to show that staying at home is the best approach against this virus.", 15, canvasHeight / 8 + ts * 4.5)
     text("During the simulation, we will keep track of       healthy,      infected,      recovered, and       dead individuals.", 15, canvasHeight / 8 + ts * 6)
     text("Individuals at home have a yellow shell       preventing them from getting infected.", 15, canvasHeight / 8 + ts * 7.5)
@@ -179,20 +180,19 @@ function welcomePage() {
       text("You can change quarantine modes by clicking on          (Bottom of the screen).", 15, canvasHeight / 8 + ts * 9)
     text("Bi-weekly charts will be displayed as well as a summary at the end.", 15, canvasHeight / 8 + ts * 10.5)
     fill(healthyColor);
-    circle(ts * (21-2*mobile) , canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
+    circle(ts * (21-mobile) , canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
     fill(infectedColor);
-    circle(ts * (26.2-2*mobile), canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
+    circle(ts * (26.2-mobile), canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
     fill(recoveredColor);
-    circle(ts * (31.5-2*mobile), canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
+    circle(ts * (31.5-mobile), canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
     fill(deadColor);
-    circle(ts * (40.1-2*mobile), canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
+    circle(ts * (40.1-mobile), canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
     fill(255, 255, 255, 0)
     stroke(255, 204, 0);
     strokeWeight(1.7);
-    circle(ts * 1(9.3-2*mobile), canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (19.3-mobile), canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
     noStroke();
     fill(0, 0, 0, 170);
-
     fill(infectedColor);
     if (!mobile)
       triangle(ts * 25 - 9, canvasHeight / 8 + ts * 9 - 10, ts * 25 - 15, canvasHeight / 8 + ts * 9 + 1, ts * 25 - 3, canvasHeight / 8 + ts * 9 + 1)
@@ -210,17 +210,17 @@ function welcomePage() {
       text("Le mode de quarantaine peut être changé en cliquant sur            (Bas de l'écran).", 15, canvasHeight * 0.58 + ts * 9)
     text("Des graphiques bihebdomadaires seront affichés ainsi qu'un résumé à la fin.", 15, canvasHeight * 0.58 + ts * 10.5)
     fill(healthyColor);
-    circle(ts * (15.5-2*mobile), canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
+    circle(ts * (15.5-mobile), canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
     fill(infectedColor);
-    circle(ts * (20.5-2*mobile), canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
+    circle(ts * (20.5-mobile), canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
     fill(recoveredColor);
-    circle(ts * (26.3-2*mobile), canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
+    circle(ts * (26.3-mobile), canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
     fill(deadColor);
-    circle(ts * (32.7-2*mobile), canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
+    circle(ts * (32.7-mobile), canvasHeight * 0.58 + ts * 6 - 4, ts * 0.7)
     fill(255, 255, 255, 0)
     stroke(255, 204, 0);
     strokeWeight(1.7);
-    circle(ts * (23.2-2*mobile), canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (23.2-mobile), canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
     noStroke();
 
     fill(infectedColor);
@@ -238,17 +238,17 @@ function welcomePage() {
       text("You can change quarantine modes by clicking on          (Bottom of the screen).", 15, canvasHeight / 8 + ts * 10.5)
     text("Bi-weekly charts will be displayed as well as a summary at the end.", 15, canvasHeight / 8 + ts * 12)
     fill(healthyColor);
-    circle(ts * (21-2*mobile), canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (21-mobile), canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
     fill(infectedColor);
-    circle(ts * (26.2-2*mobile), canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (26.2-mobile), canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
     fill(recoveredColor);
-    circle(ts * (31.7-2*mobile), canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (31.7-mobile), canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
     fill(deadColor);
-    circle(ts * (40.1-2*mobile), canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (40.1-mobile), canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
     fill(255, 255, 255, 0)
     stroke(255, 204, 0);
     strokeWeight(1.7);
-    circle(ts * (25-2*mobile), canvasHeight / 8 + ts * 9 - 4, ts * 0.7)
+    circle(ts * (25-mobile), canvasHeight / 8 + ts * 9 - 4, ts * 0.7)
     noStroke();
 
     fill(infectedColor);
@@ -269,17 +269,17 @@ function welcomePage() {
       text("Le mode de quarantaine peut être changé en cliquant sur            (Bas de l'écran).", 15, canvasHeight * 0.58 + ts * 10.5)
     text("Des graphiques bihebdomadaires seront affichés ainsi qu'un résumé à la fin.", 15, canvasHeight * 0.58 + ts * 12)
     fill(healthyColor);
-    circle(ts * (15.8-2*mobile), canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (15.8-mobile), canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
     fill(infectedColor);
-    circle(ts * (20.8-2*mobile), canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (20.8-mobile), canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
     fill(recoveredColor);
-    circle(ts * (26.4-2*mobile), canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (26.4-mobile), canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
     fill(deadColor);
-    circle(ts * (33-2*mobile), canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
+    circle(ts * (33-mobile), canvasHeight * 0.58 + ts * 7.5 - 4, ts * 0.7)
     fill(255, 255, 255, 0)
     stroke(255, 204, 0);
     strokeWeight(1.7);
-    circle(ts * (23.4-2*mobile), canvasHeight * 0.58 + ts * 9 - 4, ts * 0.7)
+    circle(ts * (23.4-mobile), canvasHeight * 0.58 + ts * 9 - 4, ts * 0.7)
     noStroke();
 
     fill(infectedColor);
