@@ -111,7 +111,7 @@ async function setup() {
   dead = 0;
   mvFreq = 100;
   speed = 1.5 + mobile*1.5;
-  quarantine = !mobile;
+  quarantine = mobile;
   quarantineStop = 0.025;
   quarantineMov = 0.012;
   normalStop = 0.01;
