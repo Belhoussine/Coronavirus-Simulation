@@ -741,7 +741,7 @@ function makeSummary() {
   textSize(26);
   if (mobile) textSize(35)
   fill(0, 0, 0);
-  text("Statistics", canvasWidth * 0.85 - mobile * 250, (3*mobile+1) *canvasHeight / 4 );
+  text("Statistics", canvasWidth * 0.85 - mobile * 250, (2*mobile+1) *canvasHeight / 4 );
   textSize(13)
   if (mobile) textSize(25)
   text("Days elapsed: " + currentDay + "(" +Math.ceil(currentDay / 7)+" weeks)", canvasWidth * 0.8 - mobile * 250, (2*mobile + 1) *canvasHeight / 4 + 40 + mobile * 15);
