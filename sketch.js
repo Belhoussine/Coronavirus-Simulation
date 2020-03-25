@@ -1,5 +1,5 @@
 var population = [];
-
+var mobile;
 
 //Triangle data
 
@@ -79,13 +79,12 @@ function setup() {
   background(255);
   population = [];
   insideTriangle = false;
-
-
+  mobile = isMobile();
   //
   canvasWidth = windowWidth;
   canvasHeight = windowHeight;
   populationSize = Math.floor(Math.max(canvasWidth, canvasHeight) / 200) * 100;
-  populationSize = isMobile() ? Math.min(500, populationSize) : populationSize;
+  populationSize = mobile ? Math.min(500, populationSize) : populationSize;
   personSize = 10;
   offset = personSize / 2;
 
@@ -151,7 +150,7 @@ function welcomePage() {
 
   fill(0, 0, 0, 200);
   noStroke();
-  let ts = min(16, canvasWidth / 46);
+  let ts = min(20, canvasWidth / 46);
   textSize(ts+10);
   text("#StayAtHome",canvasWidth/2-5*ts,canvasHeight/18)
   textSize(ts+7);
@@ -166,6 +165,9 @@ function welcomePage() {
     text("The ultimate goal of this simulation is to raise awareness, and to show that staying at home is the best approach against this virus.", 15, canvasHeight / 8 + ts * 4.5)
     text("During the simulation, we will keep track of       healthy,      infected,      recovered, and       dead individuals.", 15, canvasHeight / 8 + ts * 6)
     text("Individuals at home have a yellow shell       preventing them from getting infected.", 15, canvasHeight / 8 + ts * 7.5)
+    if(mobile)
+      text("You can change quarantine modes by touching the screen.", 15, canvasHeight / 8 + ts * 9)
+    else
     text("You can change quarantine modes by clicking on          (Bottom of the screen).", 15, canvasHeight / 8 + ts * 9)
     text("Bi-weekly charts will be displayed as well as a summary at the end.", 15, canvasHeight / 8 + ts * 10.5)
     fill(healthyColor);
@@ -184,6 +186,7 @@ function welcomePage() {
     fill(0, 0, 0, 170);
     
     fill(infectedColor);
+    if(!mobile)
     triangle(ts*25-9,canvasHeight / 8 + ts * 9 - 10,ts * 25 -15,canvasHeight / 8 + ts * 9 +1, ts * 25-3,canvasHeight / 8 + ts * 9 +1)
     fill(0, 0, 0, 170);
     //////////
@@ -193,6 +196,9 @@ function welcomePage() {
     text("Le but ultime de cette simulation est de sensibiliser et de montrer que rester à la maison est la meilleure approche contre ce virus.", 15, canvasHeight * 0.58 + ts * 4.5)
     text("Nous suiverons les personnes       saines,      infectées,      guéries, et      décédées.", 15, canvasHeight * 0.58 + ts * 6)
     text("Les individus à la maison ont une coquille jaune       qui les empêche d'être infectés.", 15, canvasHeight* 0.58 + ts * 7.5)
+    if(mobile)
+      text("Le mode de quarantaine peut être changé en touchant l'écran", 15, canvasHeight * 0.58 + ts * 9)
+    else
     text("Le mode de quarantaine peut être changé en cliquant sur            (Bas de l'écran).", 15, canvasHeight * 0.58 + ts * 9)
     text("Des graphiques bihebdomadaires seront affichés ainsi qu'un résumé à la fin.", 15, canvasHeight * 0.58+ ts * 10.5)
     fill(healthyColor);
@@ -210,6 +216,7 @@ function welcomePage() {
     noStroke();
     
     fill(infectedColor);
+    if(!mobile)
     triangle(ts*29-7,canvasHeight * 0.58 + ts * 9 - 10,ts * 29 -13,canvasHeight * 0.58+ ts * 9 +1, ts * 29-1,canvasHeight * 0.58 + ts * 9+1)
 
   } else {
@@ -217,6 +224,9 @@ function welcomePage() {
     text("best approach against this virus.", 15, canvasHeight / 8 + ts * 6)
     text("During the simulation, we will keep track of       healthy,      infected,      recovered, and      dead ", 15, canvasHeight / 8 + ts * 7.5)
     text("individuals. Individuals at home have a yellow shell         preventing them from getting infected.", 15, canvasHeight / 8 + ts * 9)
+    if(mobile)
+      text("You can change quarantine modes by touching the screen.", 15, canvasHeight / 8 + ts * 10.5)
+    else
     text("You can change quarantine modes by clicking on          (Bottom of the screen).", 15, canvasHeight / 8 + ts * 10.5)
     text("Bi-weekly charts will be displayed as well as a summary at the end.", 15, canvasHeight / 8 + ts * 12)
     fill(healthyColor);
@@ -234,6 +244,7 @@ function welcomePage() {
     noStroke();
     
     fill(infectedColor);
+    if(!mobile)
     triangle(ts*25-7,canvasHeight / 8 + ts * 10.5 - 10,ts * 25 -13,canvasHeight / 8 + ts * 10.5 +1, ts * 25-1,canvasHeight / 8 + ts * 10.5 +1)
     fill(0, 0, 0, 170);
     //////////
@@ -244,6 +255,9 @@ function welcomePage() {
     text("meilleure approche contre ce virus.", 15, canvasHeight * 0.58 + ts * 6)
     text("Nous suiverons les personnes       saines,      infectées,      guéries, et      décédées.", 15, canvasHeight * 0.58 + ts * 7.5)
     text("Les individus à la maison ont une coquille jaune       qui les empêche d'être infectés.", 15, canvasHeight* 0.58 + ts * 9)
+    if (mobile)
+      text("Le mode de quarantaine peut être changé en touchant l'écran.", 15, canvasHeight * 0.58 + ts * 10.5)
+    else
     text("Le mode de quarantaine peut être changé en cliquant sur            (Bas de l'écran).", 15, canvasHeight * 0.58 + ts * 10.5)
     text("Des graphiques bihebdomadaires seront affichés ainsi qu'un résumé à la fin.", 15, canvasHeight * 0.58+ ts * 12)
     fill(healthyColor);
@@ -261,6 +275,7 @@ function welcomePage() {
     noStroke();
     
     fill(infectedColor);
+    if(!mobile)
     triangle(ts*29-7,canvasHeight * 0.58 + ts * 10.5 - 10,ts * 29 -13,canvasHeight * 0.58+ ts * 10.5 +1, ts * 29-1,canvasHeight * 0.58 + ts * 10.5 +1)
   }
 }
@@ -270,7 +285,7 @@ function makeStartButton() {
   button = createButton('Start Simulation');
   button.position(canvasWidth / 2, canvasHeight * 0.95);
   button.style('margin', '0');
-  if(!isMobile())
+  if(mobile)
   button.style('transform', 'translate(-40%, 0%)');
   button.style('letter-spacing', '0.5px');
   button.style('font-size', '10px');
@@ -393,6 +408,7 @@ function updateText() {
   makeTriangle();
   noStroke();
   textSize(20);
+  if(mobile) textSize(26);
   fill(healthyColor);
   text('Healthy: ' + healthy, canvasWidth - 140, 25);
   fill(infectedColor);
@@ -538,7 +554,7 @@ function makeButton() {
   button = createButton('Continue');
   button.position(canvasWidth - 100, canvasHeight / 30);
   button.style('margin', '0');
-  if(!isMobile)
+  if(mobile)
   button.style('transform', 'translate(-40%, 0%)');
   button.style('font-size', '12px');
   button.style('position', 'absolute');
@@ -592,7 +608,7 @@ function makeRestartButton() {
   button = createButton('Restart');
   button.position(canvasWidth - 90, canvasHeight / 30);
   button.style('margin', '0');
-  if(!isMobile)
+  if(mobile)
   button.style('transform', 'translate(-40%, 0%)');
   button.style('font-size', '12px');
   button.style('position', 'absolute');
@@ -686,7 +702,7 @@ function makeSummary() {
   text("Total Recovered: " + recovered + " (" + recoveredPer + "%)", canvasWidth - 211, canvasHeight / 4 + 130);
 }
 function changeMobile(){
-  if(!summarizing && isMobile()){
+  if(!summarizing && mobile){
     changeState();
   }
 }
@@ -764,7 +780,3 @@ function changeState() {
 // MOVE STATISTICS TO THE LEFT
 
 // ADD MORE STATISTICS
-
-// ADD WELCOME PAGE
-
-// ADD TACTILE FOR PHONE
