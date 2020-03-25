@@ -1,6 +1,6 @@
 var population = [];
 var mobile;
-
+var infectedMoroccans;
 //Triangle data
 
 var tx1;
@@ -59,6 +59,7 @@ var flag2;
 var flag4;
 var insideTriangle;
 var started;
+var endFlag;
 
 //Visual Characteristics
 var healthyColor = 'rgba(20, 100, 20, 0.65)';
@@ -74,8 +75,9 @@ var complicationRate;
 
 // Initialization Function
 
-function setup() {
-
+async function setup() {
+  infectedMoroccans = await getDataset();
+  console.log(infectedMoroccans)
   background(255);
   population = [];
   insideTriangle = false;
@@ -132,13 +134,12 @@ function setup() {
   flag = true;
   flag2 = true;
   flag3 = true;
-
+  endFlag = true;
   started = false;
   //
   recoveryRate = 0.9;
   deathRate = 0.05;
   complicationRate = 0.1;
-
   frameRate(fRate);
   createCanvas(canvasWidth, canvasHeight);
   background(255);
@@ -152,7 +153,7 @@ function welcomePage() {
   fill(0, 0, 0, 200);
   noStroke();
   let ts = min(16, canvasWidth / 46);
-  if (mobile ) ts = 24;
+  if (mobile) ts = 24;
   textSize(ts + 10);
   text("#StayAtHome", canvasWidth / 2 - 5 * ts, canvasHeight / 18)
   textSize(ts + 7);
@@ -345,7 +346,12 @@ function _main() {
     wakeUp();
     updateText();
   }
-  summary();
+  if (healthy != 0)
+    summary();
+  else if (endFlag) {
+    speed *= 2;
+    endFlag = false;
+  }
 }
 
 //Updating data each day
@@ -416,6 +422,8 @@ function updateText() {
   noStroke();
   textSize(20);
   if (mobile) textSize(32);
+  fill('red')
+  text('Infections in Morocco: '+ infectedMoroccans, canvasWidth/3 + mobile * 30, 30 + mobile * 30);
   fill(healthyColor);
   text('Healthy: ' + healthy, canvasWidth - 140 - mobile * 85, 25 + mobile * 20);
   fill(infectedColor);
@@ -802,6 +810,26 @@ function changeState() {
   }
 }
 
+async function getDataset() {
+let m = month() < 10 ? '0'+month().toString():month().toString();
+let d = day() < 10 ? '0'+(day()).toString:(day()).toString();
+let url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/'+m+'-'+d+ '-2020.csv'
+var prom =await fetch(url)
+var raw = await prom.text();
+if(raw.search("404: Not Found") != -1 ){ 
+   d = day()-1 < 10 ? '0'+(day()-1).toString:(day()-1).toString();
+  url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/'+m+'-'+d+ '-2020.csv'
+   prom =await fetch(url)
+   raw = await prom.text();
+}
+var i= raw.search("Morocco");
+var j = i+raw.substring(i+1).search("Morocco");
+var csv = raw.substring(i,j)
+var data = csv.split(",");
+
+return data[4];
+}
+
 
 // ISOLATION OF INFECTED CASES
 
@@ -810,3 +838,7 @@ function changeState() {
 // MOVE STATISTICS TO THE LEFT
 
 // ADD MORE STATISTICS
+
+// ADD WELCOME PAGE
+
+// ADD TACTILE FOR PHONE
