@@ -45,6 +45,7 @@ var summarizing;
 var updatingId;
 var movingId;
 var endResult;
+var daysOverCapacity;
 
 //Chart parameters
 var healthyHistory;
@@ -106,8 +107,7 @@ async function setup() {
   recovered = 0;
   dead = 0;
   mvFreq = 100;
-  speed = 1.5;
-  if (mobile) speed = 2;
+  speed = 1.5 + mobile;
   quarantine = false;
   quarantineStop = 0.025;
   quarantineMov = 0.012;
@@ -115,12 +115,14 @@ async function setup() {
   normalMov = 0.020;
   hospitalCapacity = Math.floor(populationSize / 3);
 
+
   //
   currentDay = 1;
   dayTime = 1.1;
   summaryFreq = 14;
   summarizing = false;
   endResult = false;
+  daysOverCapacity = 0;
 
   //
   healthyHistory = [healthy];
@@ -153,7 +155,7 @@ function welcomePage() {
   fill(0, 0, 0, 200);
   noStroke();
   let ts = min(16, canvasWidth / 46);
-  if (mobile) ts = 24;
+  if (mobile) ts = 18;
   textSize(ts + 10);
   text("#StayAtHome", canvasWidth / 2 - 5 * ts, canvasHeight / 18)
   textSize(ts + 7);
@@ -174,17 +176,17 @@ function welcomePage() {
       text("You can change quarantine modes by clicking on          (Bottom of the screen).", 15, canvasHeight / 8 + ts * 9)
     text("Bi-weekly charts will be displayed as well as a summary at the end.", 15, canvasHeight / 8 + ts * 10.5)
     fill(healthyColor);
-    circle(ts * 21, canvasHeight / 8 + ts * 6 - 4, ts * 0.6)
+    circle(ts * 21, canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
     fill(infectedColor);
-    circle(ts * 26.2, canvasHeight / 8 + ts * 6 - 4, ts * 0.6)
+    circle(ts * 26.2, canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
     fill(recoveredColor);
-    circle(ts * 31.5, canvasHeight / 8 + ts * 6 - 4, ts * 0.6)
+    circle(ts * 31.5, canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
     fill(deadColor);
-    circle(ts * 40.1, canvasHeight / 8 + ts * 6 - 4, ts * 0.6)
+    circle(ts * 40.1, canvasHeight / 8 + ts * 6 - 4, ts * 0.7)
     fill(255, 255, 255, 0)
     stroke(255, 204, 0);
     strokeWeight(1.7);
-    circle(ts * 19.3, canvasHeight / 8 + ts * 7.5 - 4, ts * 0.6)
+    circle(ts * 19.3, canvasHeight / 8 + ts * 7.5 - 4, ts * 0.7)
     noStroke();
     fill(0, 0, 0, 170);
 
@@ -346,7 +348,7 @@ function _main() {
     wakeUp();
     updateText();
   }
-  if (healthy != 0)
+  if (healthy > 5)
     summary();
   else if (endFlag) {
     speed *= 2;
@@ -356,6 +358,9 @@ function _main() {
 
 //Updating data each day
 function update() {
+  if (infected > hospitalCapacity) {
+    daysOverCapacity++;
+  }
   currentDay++;
   updateDataHistory();
 }
@@ -423,7 +428,7 @@ function updateText() {
   textSize(20);
   if (mobile) textSize(32);
   fill('red')
-  text('Infections in Morocco: '+ infectedMoroccans, canvasWidth/3 + mobile * 30, 30 + mobile * 30);
+  text('Infections in Morocco: ' + infectedMoroccans, canvasWidth / 3 + mobile * 30, 30 + mobile * 30);
   fill(healthyColor);
   text('Healthy: ' + healthy, canvasWidth - 140 - mobile * 85, 25 + mobile * 20);
   fill(infectedColor);
@@ -505,8 +510,8 @@ function summary() {
 
 function makeChart() {
   if (endResult) {
-    document.getElementById("chart-container").style.width = (canvasWidth * 0.6).toString() + "px";
-    document.getElementById("chart-container").style.right = (canvasWidth * 0.4).toString() + "px";
+    document.getElementById("chart-container").style.width = (canvasWidth * 0.75).toString() + "px";
+    document.getElementById("chart-container").style.right = (canvasWidth * 0.25).toString() + "px";
   } else {
     document.getElementById("chart-container").style.width = (canvasWidth * 0.9).toString() + "px";
   }
@@ -633,7 +638,7 @@ function makeButton() {
 
 function makeRestartButton() {
   button = createButton('Restart');
-  button.position(canvasWidth - 90, canvasHeight / 30);
+  button.position(canvasWidth - 90 - mobile*100, canvasHeight / 30);
   button.style('margin', '0');
   if (!mobile)
     button.style('transform', 'translate(-40%, 0%)');
@@ -690,7 +695,7 @@ function fadeIn() {
   textSize(14);
   if (mobile) textSize(25)
   if (endResult)
-    text("-- Congratulations to the survivors! --", canvasWidth / 2 - 105, canvasHeight / 7 + 2);
+    text("-- Congratulations to the survivors! --", canvasWidth / 2 - 105-mobile*80, canvasHeight / 7 + 2);
   else
     text("--Click on each category (colored box) to hide/show chart lines--", canvasWidth / 2 - 200 - mobile * 115, canvasHeight / 7 + 2);
   if (mobile) {
@@ -729,13 +734,17 @@ function makeSummary() {
   let deadPer = (100 * dead / populationSize).toFixed(2);
   let recoveredPer = (100 * recovered / maxInfected).toFixed(2);
   textSize(26);
+  if(mobile) textSize(35)
   fill(0, 0, 0);
-  text("Statistics", canvasWidth - 210, canvasHeight / 4);
+  text("Statistics", canvasWidth * 0.75 - mobile * 100, canvasHeight / 4);
   textSize(13)
-  text("Days elapsed: " + currentDay, canvasWidth - 211, canvasHeight / 4 + 40);
-  text("Total Infections: " + maxInfected + " (" + infectedPer + "%)", canvasWidth - 211, canvasHeight / 4 + 70);
-  text("Total Deaths: " + dead + " (" + deadPer + "%)", canvasWidth - 211, canvasHeight / 4 + 100);
-  text("Total Recovered: " + recovered + " (" + recoveredPer + "%)", canvasWidth - 211, canvasHeight / 4 + 130);
+  if(mobile) textSize(25)
+  text("Days elapsed: " + currentDay, canvasWidth * 0.75 - mobile * 100, canvasHeight / 4 + 40 + mobile * 15);
+  text("Total Infections: " + maxInfected + " (" + infectedPer + "%)", canvasWidth * 0.75 - mobile * 100, canvasHeight / 4 + 70 + mobile * 30);
+  text("Total Deaths: " + dead + " (" + deadPer + "%)", canvasWidth * 0.75- mobile * 100, canvasHeight / 4 + 100 + mobile * 45);
+  text("Total Recovered: " + recovered + " (" + recoveredPer + "%)", canvasWidth * 0.75- mobile * 100, canvasHeight / 4 + 130 + mobile * 60);
+  text("Days Over Hospitals Capacity: " + daysOverCapacity, canvasWidth * 0.75- mobile * 100, canvasHeight / 4 + 160 + mobile * 75);
+  text("Patients without a hospital bed: " + maxInfected - hospitalCapacity, canvasWidth * 0.75- mobile * 100, canvasHeight / 4 + 160 + mobile * 90);
 }
 
 function changeMobile() {
@@ -811,23 +820,35 @@ function changeState() {
 }
 
 async function getDataset() {
-let m = month() < 10 ? '0'+month().toString():month().toString();
-let d = day() < 10 ? '0'+(day()).toString:(day()).toString();
-let url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/'+m+'-'+d+ '-2020.csv'
-var prom =await fetch(url)
-var raw = await prom.text();
-if(raw.search("404: Not Found") != -1 ){ 
-   d = day()-1 < 10 ? '0'+(day()-1).toString:(day()-1).toString();
-  url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/'+m+'-'+d+ '-2020.csv'
-   prom =await fetch(url)
-   raw = await prom.text();
-}
-var i= raw.search("Morocco");
-var j = i+raw.substring(i+1).search("Morocco");
-var csv = raw.substring(i,j)
-var data = csv.split(",");
+  let today = new Date()
 
-return data[4];
+  let mo = today.getMonth()+1;
+  let da = today.getDate();
+  let m = mo < 10 ? '0' + mo.toString() : mo.toString();
+  let d = da < 10 ? '0' + (da).toString : (da).toString();
+  let url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/' + m + '-' + d + '-2020.csv'
+  var prom = await fetch(url)
+  var raw = await prom.text();
+  while (raw.search("404: Not Found") != -1) {
+    let x = 1;
+    let yesterday = new Date(today)
+    yesterday.setDate(yesterday.getDate() - x)
+    mo = yesterday.getMonth()+1;
+    da = yesterday.getDate();
+    m = mo < 10 ? '0' + mo.toString() : mo.toString();
+    d = da < 10 ? '0' + (da).toString : (da).toString();
+    url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/' + m + '-' + d + '-2020.csv'
+    prom = await fetch(url)
+    raw = await prom.text();
+    x++;
+    today = yesterday;
+  }
+  var i = raw.search("Morocco");
+  var j = i + raw.substring(i + 1).search("Morocco");
+  var csv = raw.substring(i, j)
+  var data = csv.split(",");
+
+  return data[4];
 }
 
 
@@ -838,7 +859,3 @@ return data[4];
 // MOVE STATISTICS TO THE LEFT
 
 // ADD MORE STATISTICS
-
-// ADD WELCOME PAGE
-
-// ADD TACTILE FOR PHONE
